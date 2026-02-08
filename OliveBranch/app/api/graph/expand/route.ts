@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server';
 import { expandSubgraph } from '@/services/graphService';
-import { requireAuth, hasRole } from '@/lib/auth';
+import { requireAnyPermission } from '@/lib/authMiddleware';
 import { GraphExpandParamsSchema } from '@/lib/validation/schemas';
 
 export async function GET(req: Request) {
   try {
-    const user = await requireAuth(req);
-    if (!hasRole(user, ['viewer', 'steward', 'admin'])) {
-      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
-    }
+    await requireAnyPermission(req, ['nodes:read', 'edges:add']);
     const url = new URL(req.url);
     const seedPir = url.searchParams.get('seedPir') ?? undefined;
     const capParam = url.searchParams.get('cap');

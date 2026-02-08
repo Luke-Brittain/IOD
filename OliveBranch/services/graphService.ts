@@ -6,6 +6,7 @@
 import { getSession } from '../lib/graph/client';
 import type { ApiResponse } from '../types/nodes';
 import { getNodeById } from './nodeService';
+import { hasPermission } from '../lib/auth';
 
 /**
  * Traverse upstream or downstream from a nodeId to a given depth.
@@ -67,7 +68,8 @@ export async function addEdge(user: unknown, fromId: string, toId: string, type:
       return { success: false, error: { code: 'FORBIDDEN', message: 'Unauthenticated' } };
     }
 
-    if (!['admin', 'steward'].includes(role)) {
+    // If user has permission to add edges we allow bypassing owner checks
+    if (!hasPermission(user, 'edges:add')) {
       // For non-admin/steward users, ensure they have update rights on both nodes (owner or steward)
       const a = await getNodeById(fromId);
       const b = await getNodeById(toId);

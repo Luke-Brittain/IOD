@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { addEdge } from '@/services/graphService';
-import { requireAuth } from '@/lib/auth';
+import { requirePermission, unauthorizedResponse } from '@/lib/authMiddleware';
 import { GraphEdgeSchema } from '@/lib/validation/schemas';
 
 export async function POST(req: Request) {
   try {
-    const user = await requireAuth(req);
+    const user = await requirePermission(req, 'edges:add');
     const body = await req.json();
 
     const parsed = GraphEdgeSchema.safeParse(body);

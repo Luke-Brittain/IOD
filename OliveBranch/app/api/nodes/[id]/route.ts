@@ -4,10 +4,7 @@ import { requireAuth, hasRole } from '@/lib/auth';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
-    const user = await requireAuth(req);
-    if (!hasRole(user, ['viewer', 'steward', 'admin', 'editor'])) {
-      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
-    }
+    await requireAnyPermission(req, ['nodes:read']);
 
     const id = params.id;
     const res = await getNodeById(id);

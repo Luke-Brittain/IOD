@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server';
 import { traverse } from '@/services/graphService';
-import { requireAuth, hasRole } from '@/lib/auth';
+import { requireAnyPermission } from '@/lib/authMiddleware';
 import { GraphTraverseParamsSchema } from '@/lib/validation/schemas';
 
 export async function GET(req: Request) {
   try {
-    const user = await requireAuth(req);
-    if (!hasRole(user, ['viewer', 'steward', 'admin'])) {
-      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
-    }
+    await requireAnyPermission(req, ['nodes:read', 'edges:add']);
     const url = new URL(req.url);
     const nodeId = url.searchParams.get('nodeId') ?? undefined;
     const direction = (url.searchParams.get('direction') as 'upstream' | 'downstream') ?? undefined;

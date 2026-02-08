@@ -6,6 +6,7 @@
 import type { ApiResponse } from '../types/nodes';
 import type { System, Dataset, Table, Field, CalculatedMetric } from '../types/nodes';
 import { getSupabaseServer } from '../lib/supabase/client';
+import { hasPermission } from '../lib/auth';
 
 const supabase = getSupabaseServer();
 
@@ -51,14 +52,7 @@ export async function createNode(
   node: Partial<System | Dataset | Table | Field | CalculatedMetric>
 ): Promise<ApiResponse<unknown>> {
   try {
-    if (typeof user !== 'object' || user === null) {
-      return { success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role to create node' } };
-    }
-    const u = user as Record<string, unknown>;
-    const userMeta = u.user_metadata as Record<string, unknown> | undefined;
-    const appMeta = u.app_metadata as Record<string, unknown> | undefined;
-    const role = (userMeta && (userMeta.role as string | undefined)) || (appMeta && (appMeta.role as string | undefined)) || (u.role as string | undefined);
-    if (!role || !['admin', 'steward', 'editor'].includes(role)) {
+    if (!hasPermission(user, 'nodes:create')) {
       return { success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role to create node' } };
     }
 
@@ -74,23 +68,19 @@ export async function createNode(
 export async function updateNode(user: unknown, id: string, patch: Record<string, unknown>): Promise<ApiResponse<unknown>> {
   try {
     // Authorization: admins and stewards/editors may update; owners/stewards of the node may also update.
-    if (typeof user !== 'object' || user === null) {
-      return { success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role to update node' } };
-    }
-    const u = user as Record<string, unknown>;
-    const userMeta = u.user_metadata as Record<string, unknown> | undefined;
-    const appMeta = u.app_metadata as Record<string, unknown> | undefined;
-    const role = (userMeta && (userMeta.role as string | undefined)) || (appMeta && (appMeta.role as string | undefined)) || (u.role as string | undefined);
+    // If user lacks permission to update nodes, still allow owner/steward checks below
+    const canUpdateByRole = hasPermission(user, 'nodes:update');
 
     const nodeRes = await getNodeById(id);
     if (!nodeRes.success) return nodeRes;
     const node = nodeRes.data as Record<string, unknown> | null;
 
-    const userId = u.id as string | undefined;
+    const u = typeof user === 'object' && user !== null ? (user as Record<string, unknown>) : undefined;
+    const userId = u?.id as string | undefined;
     const isOwner = !!(node && node.ownerId && userId && node.ownerId === userId);
     const isSteward = !!(node && Array.isArray(node.stewards) && (node.stewards as unknown[]).includes(userId));
 
-    if (!role || (!['admin', 'steward', 'editor'].includes(role) && !isOwner && !isSteward)) {
+    if (!canUpdateByRole && !isOwner && !isSteward) {
       return { success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role to update node' } };
     }
 

@@ -1,0 +1,6 @@
+{
+  "admin": ["nodes:create", "nodes:update", "nodes:read", "edges:add", "audit:write", "admin:*"] ,
+  "steward": ["nodes:create", "nodes:update", "nodes:read", "edges:add"],
+  "editor": ["nodes:create", "nodes:update", "nodes:read"],
+  "viewer": ["nodes:read"]
+}

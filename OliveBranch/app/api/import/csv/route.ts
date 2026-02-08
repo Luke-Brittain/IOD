@@ -4,7 +4,7 @@ import { requireAuth } from '@/lib/auth';
 
 export async function POST(req: Request) {
   try {
-    const user = await requireAuth(req);
+    const user = await requirePermission(req, 'nodes:create');
     const ct = req.headers.get('content-type') || '';
 
     // For MVP accept JSON array of rows for simplicity: { rows: [{ id, type, name, ... }, ...] }

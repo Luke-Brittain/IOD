@@ -5,7 +5,7 @@ import { NodeCreateSchema } from '@/lib/validation/schemas';
 
 export async function GET(req: Request) {
   try {
-    await requireAuth(req);
+    await requireAnyPermission(req, ['nodes:read']);
     const url = new URL(req.url);
     const roleScoped = url.searchParams.get('roleScoped') === 'true';
     const seedPir = url.searchParams.get('seedPir') ?? undefined;
@@ -22,7 +22,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const user = await requireAuth(req);
+    const user = await requirePermission(req, 'nodes:create');
     const body = await req.json();
     const parsed = NodeCreateSchema.safeParse(body);
     if (!parsed.success) {
