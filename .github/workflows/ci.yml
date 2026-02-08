@@ -39,7 +39,19 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Typecheck
-        run: pnpm --package=typescript dlx tsc --noEmit
+        run: |
+          # If there's a tsconfig at repo root, run the project build.
+          if [ -f tsconfig.json ]; then
+            pnpm --package=typescript dlx tsc -p tsconfig.json --noEmit
+          else
+            # Otherwise discover TypeScript files and run tsc on them.
+            FILES=$(git ls-files '*.ts' '*.tsx' || true)
+            if [ -z "$FILES" ]; then
+              echo "No TypeScript files found; skipping typecheck"
+            else
+              echo "$FILES" | xargs pnpm --package=typescript dlx tsc --noEmit
+            fi
+          fi
 
       - name: Lint
         run: npx eslint OliveBranch --max-warnings=0
