@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { tokens, Button, Input } from '@local/design-system';
+import styles from './DetailsPanel.module.css';
 
 interface DetailsPanelProps {
   nodeId?: string | null;
@@ -65,35 +67,35 @@ export default function DetailsPanel({ nodeId, onClose }: DetailsPanelProps) {
   };
 
   return (
-    <aside style={{ width: 360, padding: 16, background: '#fff', borderLeft: '1px solid #e6edf0' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <aside className={styles.panel}>
+      <div className={styles.header}>
         <h3>Node: {nodeId}</h3>
-        <button onClick={onClose}>Close</button>
+        <Button variant="ghost" size="sm" onClick={onClose}>Close</Button>
       </div>
 
       {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
 
-      <div style={{ marginTop: 12 }}>
-        <button onClick={() => setEditing((s) => !s)}>{editing ? 'Cancel' : 'Edit'}</button>
+      <div className={styles.actions}>
+        <Button variant="ghost" size="sm" onClick={() => setEditing((s) => !s)}>{editing ? 'Cancel' : 'Edit'}</Button>
       </div>
 
       {editing ? (
         <form onSubmit={handleSubmit}>
-          <div style={{ marginTop: 12 }}>
-            <label>
+          <div className={styles.section}>
+            <label className={styles.label}>
               Name
-              <input value={(formState.name as string) ?? ''} onChange={(e) => setFormState({ ...formState, name: e.target.value })} />
             </label>
+            <Input className={styles.input} value={(formState.name as string) ?? ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormState({ ...formState, name: e.target.value })} />
           </div>
-          <div style={{ marginTop: 12 }}>
-            <button type="submit" disabled={loading}>Save</button>
+          <div className={styles.section}>
+            <Button type="submit" variant="primary" disabled={loading}>Save</Button>
           </div>
         </form>
       ) : (
-        <div style={{ marginTop: 12 }}>
+        <div className={styles.section}>
           <p>Read-only details for node <strong>{nodeId}</strong>. Use Edit to modify.</p>
-          <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(formState, null, 2)}</pre>
+          <pre className={styles.pre}>{JSON.stringify(formState, null, 2)}</pre>
         </div>
       )}
     </aside>

@@ -1,0 +1,31 @@
+.panel {
+  width: 360px;
+  padding: var(--space-md);
+  background: var(--bg-primary);
+  border-left: 1px solid rgba(0,0,0,0.04);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.actions {
+  margin-top: var(--space-sm);
+}
+
+.section {
+  margin-top: var(--space-sm);
+}
+
+.pre {
+  white-space: pre-wrap;
+}
+
+.label { display: block; margin-bottom: 6px; font-size: 13px; }
+.input { width: 100%; padding: var(--space-xs) var(--space-sm); border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; }

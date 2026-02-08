@@ -1,0 +1,23 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.primary {
+  color: #022;
+  background: linear-gradient(135deg, #007B7A 0%, #00B3C6 70%, #C9A84A 100%);
+  border: none;
+}
+
+.ghost {
+  background: transparent;
+  color: var(--text-primary, #0E1B20);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.size-md { padding: 10px 20px; font-size: 16px; }
+.size-sm { padding: 8px 14px; font-size: 14px; }

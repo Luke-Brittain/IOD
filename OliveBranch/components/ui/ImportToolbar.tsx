@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
+import { tokens, Button, Input } from '@local/design-system';
+import styles from './ImportToolbar.module.css';
 
 export default function ImportToolbar() {
   const [file, setFile] = useState<File | null>(null);
@@ -29,14 +31,15 @@ export default function ImportToolbar() {
   };
 
   return (
-    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-      <input type="file" accept=".csv,text/csv" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
-      <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <input type="checkbox" checked={dryRun} onChange={(e) => setDryRun(e.target.checked)} /> Dry-run
+    <div className={styles.toolbar}>
+      <Input type="file" accept=".csv,text/csv" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target.files?.[0] ?? null)} />
+      <label className={styles.label}>
+        <Input type="checkbox" checked={dryRun} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDryRun(e.target.checked)} />
+        <span style={{ marginLeft: 6 }}>Dry-run</span>
       </label>
-      <input placeholder="stableKeys (comma)" value={stableKeys} onChange={(e) => setStableKeys(e.target.value)} />
-      <button onClick={submit} disabled={!file || loading}>{loading ? 'Uploading...' : 'Import'}</button>
-      {result && <pre style={{ maxWidth: 400, whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>}
+      <Input placeholder="stableKeys (comma)" value={stableKeys} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStableKeys(e.target.value)} />
+      <Button onClick={submit} disabled={!file || loading}>{loading ? 'Uploading...' : 'Import'}</Button>
+      {result && <pre className={styles.result}>{JSON.stringify(result, null, 2)}</pre>}
     </div>
   );
 }

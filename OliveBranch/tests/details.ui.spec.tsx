@@ -33,14 +33,27 @@ describe('DetailsPanel UI', () => {
       setTimeout(resolve, 50);
     });
 
+    // click the Edit button to show the form
+    const btns = container.querySelectorAll('button');
+    if (btns && btns[1]) {
+      btns[1].click();
+      // allow edit UI to render
+      await new Promise((r) => setTimeout(r, 0));
+    }
+
     // simulate edit + submit by calling the form's submit via DOM
     const form = container.querySelector('form') as HTMLFormElement | null;
     if (form) {
-      // change input
+      // change input and dispatch input event so React picks it up
       const input = container.querySelector('input') as HTMLInputElement | null;
-      if (input) input.value = 'Updated';
+      if (input) {
+        input.value = 'Updated';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
       const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
       form.dispatchEvent(submitEvent);
+      // allow submit handler to run
+      await new Promise((r) => setTimeout(r, 0));
     }
 
     // PATCH should have been called

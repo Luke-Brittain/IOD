@@ -1,0 +1,7 @@
+Set-Location : A positional parameter cannot be found that accepts argument 'Docs\\IOD\\IOD-2\\dev-playground\'.
+At line:1 char:1
++ Set-Location -LiteralPath  C:\\Users\\KayaBread\\Documents\\Luke Docs ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Set-Location], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Microsoft.PowerShell.Commands.SetLocationCommand
+ 

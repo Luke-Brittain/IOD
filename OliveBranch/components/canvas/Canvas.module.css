@@ -1,0 +1,50 @@
+.canvasRoot {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  position: relative;
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-origin: 0 0;
+}
+
+.node {
+  position: absolute;
+  padding: var(--space-sm);
+  background: var(--bg-primary);
+  border: 1px solid rgba(0,0,0,0.04);
+  border-radius: 6px;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.nodeDragging {
+  box-shadow: 0 10px 30px rgba(2,18,22,0.14);
+  transform: scale(1.03);
+}
+
+.nodeHover {
+  box-shadow: 0 6px 18px rgba(2,18,22,0.08);
+  transform: translateY(-2px);
+}
+
+.nodeSelected {
+  background: rgba(0,179,198,0.06);
+}
+
+.nodeContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.nodeDot {
+  width: var(--space-sm);
+  height: var(--space-sm);
+  border-radius: 2px;
+  background: var(--color-cerulean);
+}

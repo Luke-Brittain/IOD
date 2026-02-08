@@ -90,16 +90,15 @@ describe('import/csv route (dry-run)', () => {
     const csv = 'id,name\nexists,Existing CSV\n,Created CSV\n';
 
     // Build FormData with CSV file
-    const fd = new FormData();
-    const blob = new Blob([csv], { type: 'text/csv' });
-    fd.append('file', blob, 'test.csv');
-
-    const req = new Request('http://localhost/api/import/csv?dryRun=true', {
+    // Create a lightweight request-like object where formData() returns a file-like object
+    const req = {
       method: 'POST',
-      body: fd,
-    });
+      url: 'http://localhost/api/import/csv?dryRun=true',
+      headers: new Headers({ 'content-type': 'multipart/form-data' }),
+      formData: async () => ({ get: (_: string) => ({ text: async () => csv, size: csv.length }) }),
+    } as unknown as Request;
 
-    const res = await route.POST(req as unknown as Request);
+    const res = await route.POST(req);
     const body = await (res as Response).json();
     expect(body.success).toBe(true);
     expect(body.data.summary.processed).toBe(2);

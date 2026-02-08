@@ -1,0 +1,23 @@
+{
+  "name": "dev-playground",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "dev:ci": "vite --host --port 5174",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "playwright": "^1.58.2",
+    "@local/design-system": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.2.0",
+    "@playwright/test": "^1.36.0"
+  }
+  
+}
