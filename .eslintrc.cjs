@@ -24,12 +24,7 @@ module.exports = {
     vi: 'readonly'
   },
   overrides: [
-    {
-      files: ['OliveBranch/**', '**/*.spec.ts', '**/*.spec.tsx'],
-      rules: {
-        '@typescript-eslint/no-explicit-any': 'off'
-      }
-    }
+    // Temporary overrides removed — enforce no-explicit-any consistently
   ],
   rules: {
     'no-unused-vars': 'off',
