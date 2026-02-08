@@ -25,6 +25,13 @@ describe('import/csv route (rbac rejection)', () => {
       ImportRowsSchema: { safeParse: (b: any) => ({ success: !!b && Array.isArray(b.rows), data: b }) },
     }));
 
+    // mock nodeService so imports resolve
+    vi.doMock('@/services/nodeService', () => ({
+      getNodeById: async (id: string) => ({ success: false, data: null }),
+      createNode: async () => ({ success: true, data: { id: 'created' } }),
+      updateNode: async () => ({ success: true, data: { id: 'updated' } }),
+    }));
+
     const route = await import('../app/api/import/csv/route');
 
     const payload = { rows: [{ name: 'Ignored' }] };

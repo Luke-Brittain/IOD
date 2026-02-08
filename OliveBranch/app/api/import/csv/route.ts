@@ -12,53 +12,66 @@ export async function POST(req: Request) {
     const dryRun = url.searchParams.get('dryRun') === 'true';
     // Max upload size for CSV imports (5 MB)
     const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+    // stableKeys may be provided per-upload via query param, JSON body field, or form field
+    const stableKeysQuery = url.searchParams.get('stableKeys');
 
     // For MVP accept JSON array of rows for simplicity: { rows: [{ id, type, name, ... }, ...] }
     if (ct.includes('application/json')) {
       const body = await req.json();
+      const stableKeysFromBody = Array.isArray(body?.stableKeys) ? body.stableKeys : typeof body?.stableKeys === 'string' ? String(body.stableKeys).split(',').map((s: string) => s.trim()).filter(Boolean) : undefined;
       const { ImportRowsSchema } = await import('@/lib/validation/schemas');
       const parsed = ImportRowsSchema.safeParse(body);
       if (!parsed.success) {
         return NextResponse.json({ success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.flatten() } }, { status: 400 });
       }
       const rows = parsed.data.rows;
+      const stableKeys = stableKeysQuery ? stableKeysQuery.split(',').map((s) => s.trim()).filter(Boolean) : stableKeysFromBody;
       const summary = { processed: rows.length, created: 0, updated: 0, errors: 0 };
       const rowResults: unknown[] = [];
 
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
         try {
-          if (row.id) {
-            const existing = await getNodeById(row.id);
-            if (existing.success && existing.data) {
-              if (dryRun) {
+          if (dryRun) {
+            if (row.id) {
+              const existing = await getNodeById(row.id);
+              if (existing.success && existing.data) {
                 rowResults.push({ row: i + 1, status: 'would-update' });
                 summary.updated++;
                 continue;
               }
-              await updateNode(user, row.id, row);
-              summary.updated++;
-              rowResults.push({ row: i + 1, status: 'updated' });
-              continue;
             }
-          }
-
-          if (dryRun) {
             const { NodeCreateSchema } = await import('@/lib/validation/schemas');
             const parsedCreate = NodeCreateSchema.safeParse(row as unknown);
             if (!parsedCreate.success) {
               summary.errors++;
               rowResults.push({ row: i + 1, status: 'error', code: 'VALIDATION_ERROR', message: parsedCreate.error.flatten() });
             } else {
-              summary.created++;
               rowResults.push({ row: i + 1, status: 'would-create' });
+              summary.created++;
             }
             continue;
           }
 
-          await createNode(user, row);
-          summary.created++;
-          rowResults.push({ row: i + 1, status: 'created' });
+          // Non-dry-run: prefer upsert when available, using per-upload stableKeys override if provided
+          const { upsertNode } = await import('@/services/nodeService');
+          const stableKeysForRow = stableKeys && stableKeys.length ? stableKeys : undefined;
+          const upsertRes = await upsertNode(user, row as Record<string, unknown>, stableKeysForRow);
+          // Heuristic for summary: if row had an explicit id or it includes any stableKey value, count as update; else create
+          const hasId = !!row.id;
+          const hasStableKeyVal = Array.isArray(stableKeysForRow) && stableKeysForRow.some((k) => (row as Record<string, unknown>)[k]);
+          if (upsertRes.success) {
+            if (hasId || hasStableKeyVal) {
+              summary.updated++;
+              rowResults.push({ row: i + 1, status: 'updated' });
+            } else {
+              summary.created++;
+              rowResults.push({ row: i + 1, status: 'created' });
+            }
+          } else {
+            summary.errors++;
+            rowResults.push({ row: i + 1, status: 'error', code: upsertRes.error?.code ?? 'IMPORT_ERROR', message: upsertRes.error?.message ?? 'upsert failed' });
+          }
         } catch (e: unknown) {
           summary.errors++;
           const message = typeof e === 'object' && e !== null && 'message' in e && typeof (e as Record<string, unknown>).message === 'string' ? (e as Record<string, unknown>).message as string : 'unknown';
@@ -75,6 +88,8 @@ export async function POST(req: Request) {
       // Use the WHATWG FormData support on the Request object
       const form = await req.formData();
       const file = form.get('file') as File | null;
+      const stableKeysFromForm = form.get('stableKeys') ? String(form.get('stableKeys')) : undefined;
+      const stableKeys = stableKeysQuery ? stableKeysQuery.split(',').map((s) => s.trim()).filter(Boolean) : (stableKeysFromForm ? stableKeysFromForm.split(',').map((s) => s.trim()).filter(Boolean) : undefined);
       if (!file) {
         return NextResponse.json({ success: false, error: { code: 'MISSING_FILE', message: 'Form must include a `file` field with CSV.' } }, { status: 400 });
       }
@@ -158,7 +173,7 @@ export async function POST(req: Request) {
             }
           }
 
-          // Create: remove undefined fields before insert
+          // Create/Upsert: remove undefined fields before insert/upsert
           const toCreate: Record<string, unknown> = {};
           for (const [k, v] of Object.entries(normalized)) {
             if (v !== undefined) toCreate[k] = v;
@@ -179,9 +194,22 @@ export async function POST(req: Request) {
             continue;
           }
 
-          await createNode(user, parsedCreate.data as Record<string, unknown>);
-          summary.created++;
-          rowResults.push({ row: i + 1, status: 'created' });
+          // Non-dry-run: use upsert with optional stableKeys per-upload
+          const { upsertNode } = await import('@/services/nodeService');
+          const upsertRes = await upsertNode(user, parsedCreate.data as Record<string, unknown>, stableKeys);
+          const hasStableKeyVal = Array.isArray(stableKeys) && stableKeys.some((k) => (parsedCreate.data as Record<string, unknown>)[k]);
+          if (upsertRes.success) {
+            if ((parsedCreate.data as Record<string, unknown>).id || hasStableKeyVal) {
+              summary.updated++;
+              rowResults.push({ row: i + 1, status: 'updated' });
+            } else {
+              summary.created++;
+              rowResults.push({ row: i + 1, status: 'created' });
+            }
+          } else {
+            summary.errors++;
+            rowResults.push({ row: i + 1, status: 'error', code: upsertRes.error?.code ?? 'IMPORT_ERROR', message: upsertRes.error?.message ?? 'upsert failed' });
+          }
         } catch (e: unknown) {
           summary.errors++;
           const message = typeof e === 'object' && e !== null && 'message' in e && typeof (e as Record<string, unknown>).message === 'string' ? (e as Record<string, unknown>).message as string : 'unknown';

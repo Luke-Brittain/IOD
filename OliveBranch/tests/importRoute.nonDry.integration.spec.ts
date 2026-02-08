@@ -14,6 +14,10 @@ describe('import/csv route (non-dry-run integration)', () => {
   it('JSON non-dry-run performs create and update calls', async () => {
     const createMock = vi.fn(async (user: any, payload: any) => ({ success: true, data: { id: 'created' } }));
     const updateMock = vi.fn(async (user: any, id: string, payload: any) => ({ success: true, data: { id } }));
+    const upsertMock = vi.fn(async (user: any, payload: any) => {
+      if (payload.id) return updateMock(user, payload.id, payload);
+      return createMock(user, payload);
+    });
 
     vi.doMock('next/server', () => ({
       NextResponse: { json: (body: unknown, init?: unknown) => new Response(JSON.stringify(body), init as any) },
@@ -32,10 +36,7 @@ describe('import/csv route (non-dry-run integration)', () => {
       getNodeById: async (id: string) => ({ success: id === 'exists', data: id === 'exists' ? { id: 'exists' } : null }),
       createNode: createMock,
       updateNode: updateMock,
-      upsertNode: async (user: any, payload: any) => {
-        if (payload.id) return updateMock(user, payload.id, payload);
-        return createMock(user, payload);
-      },
+      upsertNode: upsertMock,
     }));
 
     const route = await import('../app/api/import/csv/route');
@@ -59,7 +60,6 @@ describe('import/csv route (non-dry-run integration)', () => {
     expect(body.data.summary.processed).toBe(2);
     expect(body.data.summary.created).toBe(1);
     expect(body.data.summary.updated).toBe(1);
-    expect(createMock).toHaveBeenCalledTimes(1);
-    expect(updateMock).toHaveBeenCalledTimes(1);
+    expect(upsertMock).toHaveBeenCalledTimes(2);
   });
 });
