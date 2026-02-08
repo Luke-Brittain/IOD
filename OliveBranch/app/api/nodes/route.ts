@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { listNodesRoleScoped, createNode } from '@/services/nodeService';
-import { requireAuth, hasRole } from '@/lib/auth';
+import { requireAuth } from '@/lib/auth';
 import { NodeCreateSchema } from '@/lib/validation/schemas';
 
 export async function GET(req: Request) {
   try {
-    const user = await requireAuth(req);
+    await requireAuth(req);
     const url = new URL(req.url);
     const roleScoped = url.searchParams.get('roleScoped') === 'true';
     const seedPir = url.searchParams.get('seedPir') ?? undefined;
