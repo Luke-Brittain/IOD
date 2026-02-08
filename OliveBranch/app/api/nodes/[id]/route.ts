@@ -19,11 +19,13 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     await requireAuth(req);
     const id = params.id;
     const body = await req.json();
-    if (!body || typeof body !== 'object') {
-      return NextResponse.json({ success: false, error: { code: 'INVALID_BODY', message: 'Expected JSON body' } }, { status: 400 });
+    const { NodePatchSchema } = await import('@/lib/validation/schemas');
+    const parsed = NodePatchSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.flatten() } }, { status: 400 });
     }
 
-    const res = await updateNode(id, body);
+    const res = await updateNode(id, parsed.data as Record<string, unknown>);
     return NextResponse.json(res);
   } catch (err: any) {
     const status = err?.status ?? 500;

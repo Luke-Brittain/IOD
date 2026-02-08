@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { listNodesRoleScoped, createNode } from '@/services/nodeService';
 import { requireAuth } from '@/lib/auth';
+import { NodeCreateSchema } from '@/lib/validation/schemas';
 
 export async function GET(req: Request) {
   try {
@@ -22,11 +23,12 @@ export async function POST(req: Request) {
   try {
     await requireAuth(req);
     const body = await req.json();
-    if (!body || typeof body !== 'object') {
-      return NextResponse.json({ success: false, error: { code: 'INVALID_BODY', message: 'Expected JSON body' } }, { status: 400 });
+    const parsed = NodeCreateSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.flatten() } }, { status: 400 });
     }
 
-    const res = await createNode(body);
+    const res = await createNode(parsed.data);
     const status = res.success ? 201 : 500;
     return NextResponse.json(res, { status });
   } catch (err: any) {

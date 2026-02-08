@@ -10,7 +10,12 @@ export async function POST(req: Request) {
     // For MVP accept JSON array of rows for simplicity: { rows: [{ id, type, name, ... }, ...] }
     if (ct.includes('application/json')) {
       const body = await req.json();
-      const rows = Array.isArray(body.rows) ? body.rows : [];
+      const { ImportRowsSchema } = await import('@/lib/validation/schemas');
+      const parsed = ImportRowsSchema.safeParse(body);
+      if (!parsed.success) {
+        return NextResponse.json({ success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.flatten() } }, { status: 400 });
+      }
+      const rows = parsed.data.rows;
       const summary = { processed: rows.length, created: 0, updated: 0, errors: 0 };
       const rowResults: any[] = [];
 
