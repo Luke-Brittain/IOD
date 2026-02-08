@@ -21,10 +21,26 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Cache prototype node_modules
+        uses: actions/cache@v4
+        with:
+          path: prototype/node_modules
+          key: ${{ runner.os }}-prototype-node-modules-${{ hashFiles('prototype/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-prototype-node-modules-
+
       - name: Install dependencies (prototype)
         run: |
           cd prototype
-          pnpm install
+          pnpm install --store ~/.pnpm-store
 
       - name: Run lint (prototype)
         run: |
