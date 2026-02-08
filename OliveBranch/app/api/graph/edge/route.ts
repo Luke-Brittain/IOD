@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
 import { addEdge } from '@/services/graphService';
-
-function requireAuth(req: Request) {
-  const auth = req.headers.get('authorization');
-  if (!auth) throw { status: 401, message: 'Unauthorized' };
-  return auth.replace('Bearer ', '');
-}
+import { requireAuth } from '@/lib/auth';
 
 export async function POST(req: Request) {
   try {
-    requireAuth(req);
+    await requireAuth(req);
     const body = await req.json();
     const { fromId, toId, type } = body || {};
     if (!fromId || !toId || !type) return NextResponse.json({ success: false, error: { code: 'INVALID_BODY', message: 'fromId, toId and type are required' } }, { status: 400 });

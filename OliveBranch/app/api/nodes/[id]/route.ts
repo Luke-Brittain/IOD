@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
 import { getNodeById, updateNode } from '@/services/nodeService';
-
-function requireAuth(req: Request) {
-  const auth = req.headers.get('authorization');
-  if (!auth) throw { status: 401, message: 'Unauthorized' };
-  return auth.replace('Bearer ', '');
-}
+import { requireAuth } from '@/lib/auth';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
-    requireAuth(req);
+    await requireAuth(req);
     const id = params.id;
     const res = await getNodeById(id);
     return NextResponse.json(res);
@@ -21,7 +16,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   try {
-    requireAuth(req);
+    await requireAuth(req);
     const id = params.id;
     const body = await req.json();
     if (!body || typeof body !== 'object') {

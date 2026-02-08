@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
 import { traverse } from '@/services/graphService';
-
-function requireAuth(req: Request) {
-  const auth = req.headers.get('authorization');
-  if (!auth) throw { status: 401, message: 'Unauthorized' };
-  return auth.replace('Bearer ', '');
-}
+import { requireAuth } from '@/lib/auth';
 
 export async function GET(req: Request) {
   try {
-    requireAuth(req);
+    await requireAuth(req);
     const url = new URL(req.url);
     const nodeId = url.searchParams.get('nodeId');
     const direction = (url.searchParams.get('direction') as 'upstream' | 'downstream') || 'upstream';

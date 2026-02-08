@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
 import { expandSubgraph } from '@/services/graphService';
-
-function requireAuth(req: Request) {
-  const auth = req.headers.get('authorization');
-  if (!auth) throw { status: 401, message: 'Unauthorized' };
-  return auth.replace('Bearer ', '');
-}
+import { requireAuth } from '@/lib/auth';
 
 export async function GET(req: Request) {
   try {
-    requireAuth(req);
+    await requireAuth(req);
     const url = new URL(req.url);
     const seedPir = url.searchParams.get('seedPir');
     const cap = parseInt(url.searchParams.get('cap') ?? '100', 10);

@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
 import { listNodesRoleScoped, createNode } from '@/services/nodeService';
-
-function requireAuth(req: Request) {
-  const auth = req.headers.get('authorization');
-  if (!auth) throw { status: 401, message: 'Unauthorized' };
-  return auth.replace('Bearer ', '');
-}
+import { requireAuth } from '@/lib/auth';
 
 export async function GET(req: Request) {
   try {
-    requireAuth(req);
+    await requireAuth(req);
     const url = new URL(req.url);
     const roleScoped = url.searchParams.get('roleScoped') === 'true';
     const seedPir = url.searchParams.get('seedPir') ?? undefined;
@@ -25,7 +20,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    requireAuth(req);
+    await requireAuth(req);
     const body = await req.json();
     if (!body || typeof body !== 'object') {
       return NextResponse.json({ success: false, error: { code: 'INVALID_BODY', message: 'Expected JSON body' } }, { status: 400 });

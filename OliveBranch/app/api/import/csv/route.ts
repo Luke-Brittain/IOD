@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createNode, updateNode, getNodeById } from '@/services/nodeService';
-
-function requireAuth(req: Request) {
-  const auth = req.headers.get('authorization');
-  if (!auth) throw { status: 401, message: 'Unauthorized' };
-  return auth.replace('Bearer ', '');
-}
+import { requireAuth } from '@/lib/auth';
 
 export async function POST(req: Request) {
   try {
-    requireAuth(req);
+    await requireAuth(req);
     const ct = req.headers.get('content-type') || '';
 
     // For MVP accept JSON array of rows for simplicity: { rows: [{ id, type, name, ... }, ...] }
