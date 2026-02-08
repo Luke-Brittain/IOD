@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Calendar - Daily Tasks</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <h1>Daily Tasks Calendar</h1>
+        <div class="nav">
+          <button id="prev-month">‹</button>
+          <div id="month-label" class="month-label"></div>
+          <button id="next-month">›</button>
+        </div>
+      </header>
+
+      <section class="calendar-wrap">
+        <div class="weekdays">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
+        <div id="calendar" class="calendar-grid"></div>
+      </section>
+
+      <aside id="tasks-panel" class="tasks-panel hidden">
+        <button id="close-panel" class="close">×</button>
+        <h2 id="panel-date">Date</h2>
+        <form id="task-form">
+          <input id="task-input" placeholder="New task" autocomplete="off">
+          <button type="submit">Add</button>
+        </form>
+        <ul id="task-list" class="task-list"></ul>
+      </aside>
+
+      <footer class="legend">
+        <span><strong>Legend:</strong></span>
+        <span class="pill grey">Not started</span>
+        <span class="pill orange">Some done</span>
+        <span class="pill green">All done</span>
+      </footer>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

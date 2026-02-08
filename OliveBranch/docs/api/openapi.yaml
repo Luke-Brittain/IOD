@@ -1,0 +1,326 @@
+openapi: 3.0.3
+info:
+  title: Olive Branch API
+  version: 0.1.0
+  description: OpenAPI spec for Olive Branch MVP endpoints (nodes, graph, CSV import)
+servers:
+  - url: https://api.example.com
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ApiResponse:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+    NodeBase:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    System:
+      allOf:
+        - $ref: '#/components/schemas/NodeBase'
+        - type: object
+          properties:
+            description:
+              type: string
+            ownerId:
+              type: string
+    Dataset:
+      allOf:
+        - $ref: '#/components/schemas/NodeBase'
+        - type: object
+          properties:
+            systemId:
+              type: string
+            stewards:
+              type: array
+              items:
+                type: string
+    Table:
+      allOf:
+        - $ref: '#/components/schemas/NodeBase'
+        - type: object
+          properties:
+            datasetId:
+              type: string
+            stewards:
+              type: array
+              items:
+                type: string
+    Field:
+      allOf:
+        - $ref: '#/components/schemas/NodeBase'
+        - type: object
+          properties:
+            tableId:
+              type: string
+            pii:
+              type: boolean
+            dataType:
+              type: string
+    CalculatedMetric:
+      allOf:
+        - $ref: '#/components/schemas/NodeBase'
+        - type: object
+          properties:
+            primarySystemId:
+              type: string
+            derivedFromIds:
+              type: array
+              items:
+                type: string
+    PersonInRole:
+      type: object
+      properties:
+        id:
+          type: string
+        fullName:
+          type: string
+        role:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    ImportSummary:
+      type: object
+      properties:
+        processed:
+          type: integer
+        created:
+          type: integer
+        updated:
+          type: integer
+        errors:
+          type: integer
+    RowResult:
+      type: object
+      properties:
+        row:
+          type: integer
+        status:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+paths:
+  /api/nodes:
+    get:
+      summary: List nodes (optionally role-scoped)
+      parameters:
+        - in: query
+          name: roleScoped
+          schema:
+            type: boolean
+        - in: query
+          name: seedPir
+          schema:
+            type: string
+        - in: query
+          name: cap
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Node list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    post:
+      summary: Create node
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/System'
+                - $ref: '#/components/schemas/Dataset'
+                - $ref: '#/components/schemas/Table'
+                - $ref: '#/components/schemas/Field'
+                - $ref: '#/components/schemas/CalculatedMetric'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /api/nodes/{id}:
+    get:
+      summary: Get node details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Node details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    patch:
+      summary: Update node metadata (honour blank merge rules)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /api/import/csv:
+    post:
+      summary: Upload CSV template (multipart)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Import result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      summary:
+                        $ref: '#/components/schemas/ImportSummary'
+                      rows:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/RowResult'
+  /api/graph/traverse:
+    get:
+      summary: Traverse graph upstream/downstream
+      parameters:
+        - in: query
+          name: nodeId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: direction
+          schema:
+            type: string
+            enum: [upstream, downstream]
+        - in: query
+          name: depth
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Traversal result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /api/graph/expand:
+    get:
+      summary: Expand subgraph from a seed (Person-in-Role)
+      parameters:
+        - in: query
+          name: seedPir
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: cap
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Subgraph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /api/graph/edge:
+    post:
+      summary: Add an edge (contains/derived_from/owns/stewards)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromId:
+                  type: string
+                toId:
+                  type: string
+                type:
+                  type: string
+      responses:
+        '201':
+          description: Edge added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /api/csv/template:
+    get:
+      summary: Download canonical CSV template
+      responses:
+        '200':
+          description: CSV template
+          content:
+            text/csv:
+              schema:
+                type: string
