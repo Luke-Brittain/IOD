@@ -6,6 +6,17 @@ A data governance and metadata management system for tracking dataset ownership,
 
 OliveBranch provides a visual canvas-based interface for managing data assets, relationships, and governance policies across your organization.
 
+## 📖 Documentation
+
+**New to this repository?** See [DOC_INDEX.md](DOC_INDEX.md) for a complete guide to all documentation.
+
+**Quick links:**
+- 🚀 [Quick Start](#quick-start) - Get started in 5 minutes
+- 📋 [Setup Guide](SETUP.md) - Detailed setup instructions  
+- 🎯 [PR Command Reference](PR_COMMAND_REFERENCE.md) - Ready to create a PR
+- 🔄 [Visual Workflow](WORKFLOW_VISUAL.md) - Diagrams and flowcharts
+- 📚 [Complete Index](DOC_INDEX.md) - Find any documentation
+
 ## Quick Start
 
 ### For PR Creation Workflow
