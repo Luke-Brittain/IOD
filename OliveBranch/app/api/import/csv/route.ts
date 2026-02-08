@@ -41,6 +41,16 @@ export async function POST(req: Request) {
                 continue;
               }
             }
+            // attempt stable-key lookup in dry-run if stableKeys configured
+            if (!row.id && (stableKeys && stableKeys.length)) {
+              const { findNodeByStableKeys } = await import('@/services/nodeService');
+              const found = await findNodeByStableKeys(row as Record<string, unknown>, stableKeys);
+              if (found.success && found.data) {
+                rowResults.push({ row: i + 1, status: 'would-update', note: 'matched_by_stable_keys' });
+                summary.updated++;
+                continue;
+              }
+            }
             const { NodeCreateSchema } = await import('@/lib/validation/schemas');
             const parsedCreate = NodeCreateSchema.safeParse(row as unknown);
             if (!parsedCreate.success) {
@@ -169,6 +179,17 @@ export async function POST(req: Request) {
               await updateNode(user, (normalized as Record<string, unknown>).id as string, normalized as Record<string, unknown>);
               summary.updated++;
               rowResults.push({ row: i + 1, status: 'updated' });
+              continue;
+            }
+          }
+
+          // Dry-run: attempt stable-key lookup if configured
+          if (dryRun && !(normalized as Record<string, unknown>).id && (stableKeys && stableKeys.length)) {
+            const { findNodeByStableKeys } = await import('@/services/nodeService');
+            const found = await findNodeByStableKeys(normalized as Record<string, unknown>, stableKeys);
+            if (found.success && found.data) {
+              summary.updated++;
+              rowResults.push({ row: i + 1, status: 'would-update', note: 'matched_by_stable_keys' });
               continue;
             }
           }

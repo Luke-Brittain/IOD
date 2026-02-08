@@ -30,6 +30,7 @@ describe('import/csv route (rbac rejection)', () => {
       getNodeById: async (id: string) => ({ success: false, data: null }),
       createNode: async () => ({ success: true, data: { id: 'created' } }),
       updateNode: async () => ({ success: true, data: { id: 'updated' } }),
+      findNodeByStableKeys: async () => ({ success: true, data: null }),
     }));
 
     const route = await import('../app/api/import/csv/route');

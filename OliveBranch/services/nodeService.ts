@@ -133,3 +133,27 @@ export async function upsertNode(
     return { success: false, error: { code: 'DB_ERROR', message } };
   }
 }
+
+export async function findNodeByStableKeys(
+  node: Record<string, unknown>,
+  stableKeys?: string[]
+): Promise<ApiResponse<unknown>> {
+  try {
+    const keys = stableKeys && stableKeys.length ? stableKeys : getStableKeys();
+    const match: Record<string, unknown> = {};
+    for (const k of keys) {
+      if (k in node && node[k] !== undefined && node[k] !== null && node[k] !== '') {
+        match[k] = node[k] as unknown;
+      }
+    }
+
+    if (Object.keys(match).length === 0) return { success: true, data: null };
+
+    const { data, error } = await supabase.from('nodes').select('*').match(match).maybeSingle();
+    if (error) throw error;
+    return { success: true, data };
+  } catch (err: unknown) {
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
+    return { success: false, error: { code: 'DB_ERROR', message } };
+  }
+}
