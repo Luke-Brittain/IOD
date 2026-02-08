@@ -52,7 +52,7 @@ jobs:
           if [ -f tsconfig.json ]; then
             echo "Typechecking root project: tsconfig.json"
             echo "Running: pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit"
-            pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit || true
+            pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit
           fi
 
           # Install dependencies in package folders so local types (react/@types/react) are available.
@@ -70,7 +70,7 @@ jobs:
             dir=$(dirname "$cfg")
             echo "Typechecking project in: $dir"
             echo "Running in $dir: pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit"
-            (cd "$dir" && pnpm dlx --package=typescript -- tsc -p tsconfig.json --noEmit) || true
+            (cd "$dir" && pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit)
             echo "Which tsc in $dir:"; (cd "$dir" && which tsc) || true
             echo "List react deps in $dir:"; (cd "$dir" && pnpm list react @types/react --depth=0) || true
           done
@@ -86,4 +86,4 @@ jobs:
         run: pnpm exec eslint OliveBranch --max-warnings=0
 
       - name: Run tests
-        run: npx vitest run OliveBranch/tests --reporter verbose
+        run: pnpm exec vitest run OliveBranch/tests --reporter verbose
