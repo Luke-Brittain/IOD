@@ -5,6 +5,7 @@
 
 import { getSession } from '@/lib/graph/client';
 import type { ApiResponse } from '@/types/nodes';
+import { getNodeById } from '@/services/nodeService';
 
 /**
  * Traverse upstream or downstream from a nodeId to a given depth.
@@ -49,9 +50,33 @@ export async function expandSubgraph(seedPir: string, cap = 100): Promise<ApiRes
 /**
  * Add an edge between two node ids.
  */
-export async function addEdge(fromId: string, toId: string, type: string): Promise<ApiResponse<any>> {
+export async function addEdge(user: any, fromId: string, toId: string, type: string): Promise<ApiResponse<any>> {
   const session = getSession();
   try {
+    // Authorize: admin and steward can bypass owner checks
+    const role = user?.user_metadata?.role || user?.app_metadata?.role || user?.role;
+    if (!role) {
+      return { success: false, error: { code: 'FORBIDDEN', message: 'Unauthenticated' } };
+    }
+
+    if (!['admin', 'steward'].includes(role)) {
+      // For non-admin/steward users, ensure they have update rights on both nodes (owner or steward)
+      const a = await getNodeById(fromId);
+      const b = await getNodeById(toId);
+      if (!a.success) return a;
+      if (!b.success) return b;
+      const nodeA = a.data as any;
+      const nodeB = b.data as any;
+
+      const userId = user?.id;
+      const canModifyA = nodeA?.ownerId === userId || (Array.isArray(nodeA?.stewards) && nodeA.stewards.includes(userId));
+      const canModifyB = nodeB?.ownerId === userId || (Array.isArray(nodeB?.stewards) && nodeB.stewards.includes(userId));
+
+      if (!canModifyA || !canModifyB) {
+        return { success: false, error: { code: 'FORBIDDEN', message: 'Insufficient permissions on source or target node' } };
+      }
+    }
+
     const cypher = `MATCH (a {id: $fromId}), (b {id: $toId}) MERGE (a)-[r:${type}]->(b) RETURN r`;
     const result = await session.run(cypher, { fromId, toId });
     const rel = result.records[0]?.get('r');

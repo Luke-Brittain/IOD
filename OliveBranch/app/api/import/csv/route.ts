@@ -28,14 +28,14 @@ export async function POST(req: Request) {
           if (row.id) {
             const existing = await getNodeById(row.id);
             if (existing.success && existing.data) {
-              await updateNode(row.id, row);
+              await updateNode(user, row.id, row);
               summary.updated++;
               rowResults.push({ row: i + 1, status: 'updated' });
               continue;
             }
           }
 
-          await createNode(row);
+          await createNode(user, row);
           summary.created++;
           rowResults.push({ row: i + 1, status: 'created' });
         } catch (e: any) {

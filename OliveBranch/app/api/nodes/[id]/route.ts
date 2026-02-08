@@ -33,7 +33,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
       return NextResponse.json({ success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.flatten() } }, { status: 400 });
     }
 
-    const res = await updateNode(id, parsed.data as Record<string, unknown>);
+    const res = await updateNode(user, id, parsed.data as Record<string, unknown>);
     return NextResponse.json(res);
   } catch (err: any) {
     const status = err?.status ?? 500;

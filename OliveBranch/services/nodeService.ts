@@ -44,9 +44,16 @@ export async function listNodesRoleScoped(seedPir?: string, cap = 100): Promise<
     return { success: false, error: { code: 'DB_ERROR', message: err.message } };
   }
 }
-
-export async function createNode(node: Partial<System | Dataset | Table | Field | CalculatedMetric>): Promise<ApiResponse<any>> {
+export async function createNode(
+  user: any,
+  node: Partial<System | Dataset | Table | Field | CalculatedMetric>
+): Promise<ApiResponse<any>> {
   try {
+    const role = user?.user_metadata?.role || user?.app_metadata?.role || user?.role;
+    if (!role || !['admin', 'steward', 'editor'].includes(role)) {
+      return { success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role to create node' } };
+    }
+
     const { data, error } = await supabase.from('nodes').insert(node).select().single();
     if (error) throw error;
     return { success: true, data };
@@ -55,8 +62,22 @@ export async function createNode(node: Partial<System | Dataset | Table | Field 
   }
 }
 
-export async function updateNode(id: string, patch: Record<string, unknown>): Promise<ApiResponse<any>> {
+export async function updateNode(user: any, id: string, patch: Record<string, unknown>): Promise<ApiResponse<any>> {
   try {
+    // Authorization: admins and stewards/editors may update; owners/stewards of the node may also update.
+    const role = user?.user_metadata?.role || user?.app_metadata?.role || user?.role;
+
+    const nodeRes = await getNodeById(id);
+    if (!nodeRes.success) return nodeRes;
+    const node = nodeRes.data as any;
+
+    const isOwner = node?.ownerId && user?.id && node.ownerId === user.id;
+    const isSteward = Array.isArray(node?.stewards) && node.stewards.includes(user?.id);
+
+    if (!role || (!['admin', 'steward', 'editor'].includes(role) && !isOwner && !isSteward)) {
+      return { success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role to update node' } };
+    }
+
     // Respect blank-value merge rules: caller should filter out blank values before calling this function.
     const cleaned: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(patch)) {

@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     }
 
     const { fromId, toId, type } = parsed.data;
-    const res = await addEdge(fromId, toId, type);
+    const res = await addEdge(user, fromId, toId, type);
     if (!res.success) return NextResponse.json(res, { status: 500 });
     return NextResponse.json({ success: true, data: { edge: res.data } }, { status: 201 });
   } catch (err: any) {

@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.flatten() } }, { status: 400 });
     }
 
-    const res = await createNode(parsed.data);
+    const res = await createNode(user, parsed.data);
     const status = res.success ? 201 : 500;
     return NextResponse.json(res, { status });
   } catch (err: any) {
