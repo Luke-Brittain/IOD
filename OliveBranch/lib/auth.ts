@@ -24,13 +24,18 @@ export async function requireAuth(req: Request) {
     }
 
     return user;
-  } catch (err: any) {
-    throw { status: 401, message: err?.message ?? 'Authentication failed' };
+  } catch (err: unknown) {
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Authentication failed';
+    throw { status: 401, message };
   }
 }
 
-export function hasRole(user: any, allowedRoles: string[]) {
-  const role = user?.user_metadata?.role || user?.app_metadata?.role || user?.role;
+export function hasRole(user: unknown, allowedRoles: string[]) {
+  if (typeof user !== 'object' || user === null) return false;
+  const u = user as Record<string, unknown>;
+  const userMeta = u.user_metadata as Record<string, unknown> | undefined;
+  const appMeta = u.app_metadata as Record<string, unknown> | undefined;
+  const role = (userMeta && (userMeta.role as string | undefined)) || (appMeta && (appMeta.role as string | undefined)) || (u.role as string | undefined);
   if (!role) return false;
   return allowedRoles.includes(role);
 }

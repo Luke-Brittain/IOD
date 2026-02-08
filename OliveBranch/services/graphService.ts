@@ -10,7 +10,7 @@ import { getNodeById } from './nodeService';
 /**
  * Traverse upstream or downstream from a nodeId to a given depth.
  */
-export async function traverse(nodeId: string, direction: 'upstream' | 'downstream', depth = 3): Promise<ApiResponse<any>> {
+export async function traverse(nodeId: string, direction: 'upstream' | 'downstream', depth = 3): Promise<ApiResponse<unknown>> {
   const session = getSession();
   try {
     let cypher = '';
@@ -23,8 +23,9 @@ export async function traverse(nodeId: string, direction: 'upstream' | 'downstre
     const result = await session.run(cypher, { nodeId });
     const nodes = result.records.map((r) => r.get('m'));
     return { success: true, data: { nodes } };
-  } catch (err: any) {
-    return { success: false, error: { code: 'GRAPH_ERROR', message: err.message } };
+  } catch (err: unknown) {
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
+    return { success: false, error: { code: 'GRAPH_ERROR', message } };
   } finally {
     await session.close();
   }
@@ -33,15 +34,16 @@ export async function traverse(nodeId: string, direction: 'upstream' | 'downstre
 /**
  * Expand subgraph from a seed Person-in-Role (seedPir) up to a cap.
  */
-export async function expandSubgraph(seedPir: string, cap = 100): Promise<ApiResponse<any>> {
+export async function expandSubgraph(seedPir: string, cap = 100): Promise<ApiResponse<unknown>> {
   const session = getSession();
   try {
     const cypher = `MATCH (pir:PersonInRole {id: $seedPir})-[:owns|stewards*0..2]-(n) RETURN n LIMIT $cap`;
     const result = await session.run(cypher, { seedPir, cap: neo4jInt(cap) });
     const nodes = result.records.map((r) => r.get('n'));
     return { success: true, data: { nodes } };
-  } catch (err: any) {
-    return { success: false, error: { code: 'GRAPH_ERROR', message: err.message } };
+  } catch (err: unknown) {
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
+    return { success: false, error: { code: 'GRAPH_ERROR', message } };
   } finally {
     await session.close();
   }
@@ -50,11 +52,17 @@ export async function expandSubgraph(seedPir: string, cap = 100): Promise<ApiRes
 /**
  * Add an edge between two node ids.
  */
-export async function addEdge(user: any, fromId: string, toId: string, type: string): Promise<ApiResponse<any>> {
+export async function addEdge(user: unknown, fromId: string, toId: string, type: string): Promise<ApiResponse<unknown>> {
   const session = getSession();
   try {
     // Authorize: admin and steward can bypass owner checks
-    const role = user?.user_metadata?.role || user?.app_metadata?.role || user?.role;
+    if (typeof user !== 'object' || user === null) {
+      return { success: false, error: { code: 'FORBIDDEN', message: 'Unauthenticated' } };
+    }
+    const u = user as Record<string, unknown>;
+    const userMeta = u.user_metadata as Record<string, unknown> | undefined;
+    const appMeta = u.app_metadata as Record<string, unknown> | undefined;
+    const role = (userMeta && (userMeta.role as string | undefined)) || (appMeta && (appMeta.role as string | undefined)) || (u.role as string | undefined);
     if (!role) {
       return { success: false, error: { code: 'FORBIDDEN', message: 'Unauthenticated' } };
     }
@@ -65,12 +73,12 @@ export async function addEdge(user: any, fromId: string, toId: string, type: str
       const b = await getNodeById(toId);
       if (!a.success) return a;
       if (!b.success) return b;
-      const nodeA = a.data as any;
-      const nodeB = b.data as any;
+      const nodeA = a.data as Record<string, unknown> | null;
+      const nodeB = b.data as Record<string, unknown> | null;
 
-      const userId = user?.id;
-      const canModifyA = nodeA?.ownerId === userId || (Array.isArray(nodeA?.stewards) && nodeA.stewards.includes(userId));
-      const canModifyB = nodeB?.ownerId === userId || (Array.isArray(nodeB?.stewards) && nodeB.stewards.includes(userId));
+      const userId = u.id as string | undefined;
+      const canModifyA = !!(nodeA && ((nodeA.ownerId && nodeA.ownerId === userId) || (Array.isArray(nodeA.stewards) && (nodeA.stewards as unknown[]).includes(userId))));
+      const canModifyB = !!(nodeB && ((nodeB.ownerId && nodeB.ownerId === userId) || (Array.isArray(nodeB.stewards) && (nodeB.stewards as unknown[]).includes(userId))));
 
       if (!canModifyA || !canModifyB) {
         return { success: false, error: { code: 'FORBIDDEN', message: 'Insufficient permissions on source or target node' } };
@@ -81,8 +89,9 @@ export async function addEdge(user: any, fromId: string, toId: string, type: str
     const result = await session.run(cypher, { fromId, toId });
     const rel = result.records[0]?.get('r');
     return { success: true, data: { rel } };
-  } catch (err: any) {
-    return { success: false, error: { code: 'GRAPH_ERROR', message: err.message } };
+  } catch (err: unknown) {
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
+    return { success: false, error: { code: 'GRAPH_ERROR', message } };
   } finally {
     await session.close();
   }

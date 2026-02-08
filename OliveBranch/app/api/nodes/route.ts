@@ -13,9 +13,10 @@ export async function GET(req: Request) {
 
     const res = await listNodesRoleScoped(roleScoped ? seedPir : undefined, cap);
     return NextResponse.json(res);
-  } catch (err: any) {
-    const status = err?.status ?? 500;
-    return NextResponse.json({ success: false, error: { code: 'ERR', message: err?.message ?? 'Unknown' } }, { status });
+  } catch (err: unknown) {
+    const status = typeof err === 'object' && err !== null && 'status' in err ? (err as Record<string, unknown>).status as number : 500;
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
+    return NextResponse.json({ success: false, error: { code: 'ERR', message } }, { status });
   }
 }
 
@@ -31,8 +32,9 @@ export async function POST(req: Request) {
     const res = await createNode(user, parsed.data);
     const status = res.success ? 201 : 500;
     return NextResponse.json(res, { status });
-  } catch (err: any) {
-    const status = err?.status ?? 500;
-    return NextResponse.json({ success: false, error: { code: 'ERR', message: err?.message ?? 'Unknown' } }, { status });
+  } catch (err: unknown) {
+    const status = typeof err === 'object' && err !== null && 'status' in err ? (err as Record<string, unknown>).status as number : 500;
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
+    return NextResponse.json({ success: false, error: { code: 'ERR', message } }, { status });
   }
 }
