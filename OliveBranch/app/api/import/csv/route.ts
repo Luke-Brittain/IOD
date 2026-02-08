@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createNode, updateNode, getNodeById } from '@/services/nodeService';
-import { requireAuth } from '@/lib/auth';
+import { requirePermission } from '@/lib/authMiddleware';
 
 export async function POST(req: Request) {
   try {

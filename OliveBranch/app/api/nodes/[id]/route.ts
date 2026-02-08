@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getNodeById, updateNode } from '@/services/nodeService';
-import { requireAuth, hasRole } from '@/lib/auth';
+import { requireAuth } from '@/lib/auth';
+import { requireAnyPermission } from '@/lib/authMiddleware';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {

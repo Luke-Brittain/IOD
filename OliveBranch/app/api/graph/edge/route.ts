@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { addEdge } from '@/services/graphService';
-import { requirePermission, unauthorizedResponse } from '@/lib/authMiddleware';
+import { requirePermission } from '@/lib/authMiddleware';
 import { GraphEdgeSchema } from '@/lib/validation/schemas';
 
 export async function POST(req: Request) {

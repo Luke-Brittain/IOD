@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { listNodesRoleScoped, createNode } from '@/services/nodeService';
-import { requireAuth } from '@/lib/auth';
+import { requireAnyPermission, requirePermission } from '@/lib/authMiddleware';
 import { NodeCreateSchema } from '@/lib/validation/schemas';
 
 export async function GET(req: Request) {

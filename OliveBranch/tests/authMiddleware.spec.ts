@@ -9,8 +9,11 @@ vi.mock('../lib/auth', () => {
       const raw = anyReq.headers.get('x-user');
       return JSON.parse(raw ?? 'null');
     },
-    hasPermission: (user: any, permission: string) => {
-      const role = user?.user_metadata?.role;
+    hasPermission: (user: unknown, permission: string) => {
+      if (typeof user !== 'object' || user === null) return false;
+      const u = user as Record<string, unknown>;
+      const userMeta = u.user_metadata as Record<string, unknown> | undefined;
+      const role = userMeta && (userMeta.role as string | undefined);
       if (role === 'admin') return true;
       if (role === 'editor') return ['nodes:create', 'nodes:update', 'nodes:read'].includes(permission);
       if (role === 'viewer') return permission === 'nodes:read';
