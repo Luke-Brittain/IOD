@@ -10,7 +10,8 @@ build/
 .vscode/
 coverage/
 npm-debug.log*
-pnpm-lock.yaml
+// Keep only root lockfile ignored; allow package-level lockfiles like `prototype/pnpm-lock.yaml`
+/pnpm-lock.yaml
 yarn.lock
 package-lock.json
 /.idea/

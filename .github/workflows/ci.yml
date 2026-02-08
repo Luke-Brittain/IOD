@@ -40,7 +40,7 @@ jobs:
       - name: Install dependencies (prototype)
         run: |
           cd prototype
-          pnpm install --store ~/.pnpm-store
+          pnpm install --store ~/.pnpm-store --frozen-lockfile
 
       - name: Run lint (prototype)
         run: |
