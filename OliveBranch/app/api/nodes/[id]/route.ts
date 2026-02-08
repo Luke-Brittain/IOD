@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { getNodeById, updateNode } from '@/services/nodeService';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, hasRole } from '@/lib/auth';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
-    await requireAuth(req);
+    const user = await requireAuth(req);
+    if (!hasRole(user, ['viewer', 'steward', 'admin', 'editor'])) {
+      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
+    }
+
     const id = params.id;
     const res = await getNodeById(id);
     return NextResponse.json(res);
@@ -16,7 +20,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   try {
-    await requireAuth(req);
+    const user = await requireAuth(req);
+    if (!hasRole(user, ['steward', 'editor', 'admin'])) {
+      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
+    }
+
     const id = params.id;
     const body = await req.json();
     const { NodePatchSchema } = await import('@/lib/validation/schemas');

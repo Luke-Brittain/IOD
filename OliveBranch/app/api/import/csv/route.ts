@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { createNode, updateNode, getNodeById } from '@/services/nodeService';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, hasRole } from '@/lib/auth';
 
 export async function POST(req: Request) {
   try {
-    await requireAuth(req);
+    const user = await requireAuth(req);
+    if (!hasRole(user, ['admin', 'steward'])) {
+      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
+    }
     const ct = req.headers.get('content-type') || '';
 
     // For MVP accept JSON array of rows for simplicity: { rows: [{ id, type, name, ... }, ...] }

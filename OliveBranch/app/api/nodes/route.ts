@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { listNodesRoleScoped, createNode } from '@/services/nodeService';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, hasRole } from '@/lib/auth';
 import { NodeCreateSchema } from '@/lib/validation/schemas';
 
 export async function GET(req: Request) {
   try {
-    await requireAuth(req);
+    const user = await requireAuth(req);
+    if (!hasRole(user, ['viewer', 'steward', 'admin', 'editor'])) {
+      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
+    }
     const url = new URL(req.url);
     const roleScoped = url.searchParams.get('roleScoped') === 'true';
     const seedPir = url.searchParams.get('seedPir') ?? undefined;
@@ -21,7 +24,10 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    await requireAuth(req);
+    const user = await requireAuth(req);
+    if (!hasRole(user, ['steward', 'editor', 'admin'])) {
+      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
+    }
     const body = await req.json();
     const parsed = NodeCreateSchema.safeParse(body);
     if (!parsed.success) {
