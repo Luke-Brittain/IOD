@@ -21,9 +21,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   try {
     const user = await requireAuth(req);
-    if (!hasRole(user, ['steward', 'editor', 'admin'])) {
-      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
-    }
 
     const id = params.id;
     const body = await req.json();

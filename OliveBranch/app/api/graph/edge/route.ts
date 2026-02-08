@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server';
 import { addEdge } from '@/services/graphService';
-import { requireAuth, hasRole } from '@/lib/auth';
+import { requireAuth } from '@/lib/auth';
 import { GraphEdgeSchema } from '@/lib/validation/schemas';
 
 export async function POST(req: Request) {
   try {
     const user = await requireAuth(req);
-    if (!hasRole(user, ['admin', 'steward'])) {
-      return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient role' } }, { status: 403 });
-    }
     const body = await req.json();
 
     const parsed = GraphEdgeSchema.safeParse(body);
