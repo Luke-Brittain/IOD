@@ -6,6 +6,24 @@ This document provides step-by-step instructions to set up the OliveBranch repos
 
 If you just want to make the script work quickly:
 
+### Option 1: Automated Setup (Recommended)
+
+Run the provided setup script:
+
+**PowerShell:**
+```powershell
+.\scripts\setup-branches.ps1
+```
+
+**Bash/Linux/Mac:**
+```bash
+./scripts/setup-branches.sh
+```
+
+See [scripts/README.md](scripts/README.md) for more details on the automation scripts.
+
+### Option 2: Manual Setup
+
 1. Go to GitHub repository settings and set the default branch to `main` (or create it from the current default branch)
 2. Create a `feature/setup-github` branch from `main`
 3. Make at least one commit on `feature/setup-github`
