@@ -9,12 +9,20 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:vitest/recommended'
+    'plugin:@typescript-eslint/recommended'
   ],
   env: {
     node: true,
     es2021: true
+  },
+  globals: {
+    describe: 'readonly',
+    it: 'readonly',
+    test: 'readonly',
+    expect: 'readonly',
+    beforeEach: 'readonly',
+    afterEach: 'readonly',
+    vi: 'readonly'
   },
   rules: {
     'no-unused-vars': 'off',
