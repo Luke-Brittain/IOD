@@ -45,11 +45,13 @@ jobs:
             pnpm --package=typescript dlx tsc -p tsconfig.json --noEmit
           else
             # Otherwise discover TypeScript files and run tsc on them.
-            if [ -n "$(git ls-files '*.ts' '*.tsx')" ]; then
-              # Use zero-delimited paths so filenames with spaces are handled safely
-              git ls-files -z '*.ts' '*.tsx' | xargs -0 -n 200 pnpm --package=typescript dlx tsc --noEmit --
-            else
+            FILE_COUNT=$(git ls-files '*.ts' '*.tsx' | wc -l || echo 0)
+            if [ "$FILE_COUNT" -eq 0 ]; then
               echo "No TypeScript files found; skipping typecheck"
+            else
+              # Use zero-delimited paths so filenames with spaces are handled safely.
+              # Call tsc via sh -c to ensure args are passed correctly by xargs.
+              git ls-files -z '*.ts' '*.tsx' | xargs -0 -n 200 sh -c 'pnpm --package=typescript dlx tsc --noEmit -- "$@"' sh
             fi
           fi
 
