@@ -49,7 +49,15 @@ jobs:
             if [ -z "$FILES" ]; then
               echo "No TypeScript files found; skipping typecheck"
             else
-              echo "$FILES" | xargs pnpm --package=typescript dlx tsc --noEmit
+              # Use zero-delimited paths so filenames with spaces are handled safely
+              git ls-files -z '*.ts' '*.tsx' | \
+                { read -r -d '' || true; } && true
+              FILES_Z=$(git ls-files -z '*.ts' '*.tsx' || true)
+              if [ -z "$FILES_Z" ]; then
+                echo "No TypeScript files found; skipping typecheck"
+              else
+                echo "$FILES_Z" | tr '\0' '\n' | xargs -0 -n 200 pnpm --package=typescript dlx tsc --noEmit
+              fi
             fi
           fi
 
