@@ -8,6 +8,8 @@ export async function POST(req: Request) {
     const ct = req.headers.get('content-type') || '';
     const url = new URL(req.url);
     const dryRun = url.searchParams.get('dryRun') === 'true';
+    // Max upload size for CSV imports (5 MB)
+    const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 
     // For MVP accept JSON array of rows for simplicity: { rows: [{ id, type, name, ... }, ...] }
     if (ct.includes('application/json')) {
@@ -75,9 +77,16 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: false, error: { code: 'MISSING_FILE', message: 'Form must include a `file` field with CSV.' } }, { status: 400 });
       }
 
+      // Enforce max file size to avoid OOM on large uploads
+      if (typeof (file as any).size === 'number' && (file as any).size > MAX_UPLOAD_BYTES) {
+        return NextResponse.json({ success: false, error: { code: 'FILE_TOO_LARGE', message: 'Uploaded file exceeds the 5MB size limit.' } }, { status: 413 });
+      }
+
       const text = await file.text();
 
       // Simple CSV parser that handles quoted fields and double-quote escaping.
+      // TODO: Replace this lightweight parser with an RFC4180-capable streaming parser
+      // (e.g., papaparse or csv-parse) for production and support embedded newlines.
       function parseLine(line: string): string[] {
         const out: string[] = [];
         let cur = '';
@@ -199,7 +208,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, data: { summary, rows: rowResults } });
     }
 
-    return NextResponse.json({ success: false, error: { code: 'INVALID_CONTENT_TYPE', message: 'Use application/json with { rows: [...] } or multipart/form-data (not implemented).' } }, { status: 400 });
+    return NextResponse.json({ success: false, error: { code: 'INVALID_CONTENT_TYPE', message: 'Use application/json with { rows: [...] } or multipart/form-data with a `file` field.' } }, { status: 400 });
   } catch (err: unknown) {
     const status = typeof err === 'object' && err !== null && 'status' in err ? (err as Record<string, unknown>).status as number : 500;
     const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';

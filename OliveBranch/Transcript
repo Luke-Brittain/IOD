@@ -1,0 +1,144 @@
+For cross-system ambiguity at “report/metric level,” Olive Branch will adopt Option A: Primary System anchor in the near-term evolution path. Option B (Accountability overlay) is explicitly reserved as a future enhancement.
+
+1) Product summary
+
+Olive Branch is a manual-first data lineage + data catalogue where governance is native to the model and the UI.
+
+Graph model: assets and governance people-in-role are nodes; relationships are edges.
+
+Core UI: lineage canvas with a left toolbar and double-click → right details panel.
+
+MVP ingestion: CSV template upload + manual editing. No DB connections in MVP.
+
+Default experience: role-scoped “lay of the land” graph expanded until no more edges with a cap.
+
+2) Users and roles
+
+Base roles:
+
+Data Governance Lead
+
+System Administrator
+
+Data Owner
+
+Data Steward
+
+Governance is represented as Person-in-Role nodes (Name + Role) so users can identify contact points directly from lineage.
+
+3) Governance rules (MVP)
+
+System-level ownership only. A system has an owner; all child assets inherit ownership.
+
+Stewardship applies only to Datasets and Tables (not Fields or Metrics).
+
+PII is mandatory at Field level and is Yes/No (manual).
+
+CSV import merges and preserves manual changes.
+
+Landing view is role-scoped, expanded until edges exhausted with a cap.
+
+4) Data model
+Node types
+
+System
+
+Dataset
+
+Table
+
+Field
+
+Calculated Metric
+
+Governance Person-in-Role (Name + Role)
+
+Edge types
+
+Structural / lineage:
+
+contains (System→Dataset/Table, Dataset/Table→Field)
+
+derived from (Asset→Asset, Metric→Asset)
+
+Governance:
+
+owns (Person-in-role→System only)
+
+stewards (Person-in-role→Dataset/Table only)
+
+5) Metadata model
+
+Built-in mandatory
+
+Field.PII (Yes/No)
+
+Node name
+
+Business-defined fields (configured by DG Lead/Admin)
+
+Global fields (all node types)
+
+Per-node-type fields (distinct per node type)
+
+Field types: text, boolean, single-select, multi-select
+
+Required/optional per field
+
+Shown in:
+
+Node details panel
+
+CSV templates
+
+6) Core UX (MVP)
+A) Landing: role-scoped “lay of the land”
+
+User lands on a subgraph centered on their Person-in-Role node, including owned/stewarded assets and connected lineage. Expansion continues until no edges remain, constrained by a configurable cap. When cap is hit, the UI offers “Expand more.”
+
+B) Canvas interaction
+
+Left toolbar provides:
+
+select/pan
+
+add node
+
+add edge
+
+import CSV
+
+filters/toggles (node types, show/hide governance nodes, PII-only filter)
+
+C) Details panel (double-click)
+
+Right panel displays:
+
+core metadata + business-defined metadata
+
+relationship summary (upstream/downstream, containment)
+
+governance section (owner inherited from system; stewards on dataset/table)
+
+7) CSV import behaviour (merge-preserving)
+
+Upsert by stable keys
+
+Blank values do not overwrite existing values
+
+Edges are additive by default (no deletions unless explicitly supported later)
+
+Evolution path: handling cross-system ambiguity (locked)
+Option A — Primary System anchor (adopted)
+
+For Calculated Metrics (and future “Report” nodes), Olive Branch will support a Primary System attribute:
+
+Metric/Report accountability is anchored to one system.
+
+Ownership continues to flow via inheritance: Owner = Owner(Primary System).
+
+The lineage graph can still show multi-system derivations; the Primary System is the governance anchor.
+
+Future enhancement (explicit)
+
+Option B — Accountability overlay (a distinct governance relationship for cross-system outputs) remains a future-phase add-on once the organisation needs more nuance than Primary System can provide.
