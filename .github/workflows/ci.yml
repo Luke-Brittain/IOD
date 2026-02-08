@@ -83,7 +83,7 @@ jobs:
           path: logs/typecheck-${{ matrix.node-version }}.log
 
       - name: Lint
-        run: npx eslint OliveBranch --max-warnings=0
+        run: pnpm exec eslint OliveBranch --max-warnings=0
 
       - name: Run tests
         run: npx vitest run OliveBranch/tests --reporter verbose
