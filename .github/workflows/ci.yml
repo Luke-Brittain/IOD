@@ -49,7 +49,7 @@ jobs:
             pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit
           fi
 
-          git ls-files -z '**/tsconfig.json' | while IFS= read -r -d '' cfg; do
+          git ls-files -z '**/tsconfig.json' | tr '\0' '\n' | grep -v '^removed-unused/' | while IFS= read -r cfg; do
             dir=$(dirname "$cfg")
             echo "Typechecking project in: $dir"
             (cd "$dir" && pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit)
