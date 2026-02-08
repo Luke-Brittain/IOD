@@ -7,6 +7,7 @@ import type { ApiResponse } from '../types/nodes';
 import type { System, Dataset, Table, Field, CalculatedMetric } from '../types/nodes';
 import { getSupabaseServer } from '../lib/supabase/client';
 import { hasPermission } from '../lib/auth';
+import { getStableKeys } from '../config/stableKeys';
 
 const supabase = getSupabaseServer();
 
@@ -92,6 +93,63 @@ export async function updateNode(user: unknown, id: string, patch: Record<string
     }
 
     const { data, error } = await supabase.from('nodes').update(cleaned).eq('id', id).select().single();
+    if (error) throw error;
+    return { success: true, data };
+  } catch (err: unknown) {
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
+    return { success: false, error: { code: 'DB_ERROR', message } };
+  }
+}
+
+export async function upsertNode(
+  user: unknown,
+  node: Record<string, unknown>,
+  stableKeys?: string[]
+): Promise<ApiResponse<unknown>> {
+  try {
+    const keys = stableKeys && stableKeys.length ? stableKeys : getStableKeys();
+    // Build match object from provided keys that exist on the payload
+    const match: Record<string, unknown> = {};
+    for (const k of keys) {
+      if (k in node && node[k] !== undefined && node[k] !== null && node[k] !== '') {
+        match[k] = node[k] as unknown;
+      }
+    }
+
+    if (Object.keys(match).length > 0) {
+      // Try to find existing by stable key(s)
+      const { data: existing, error: selErr } = await supabase.from('nodes').select('*').match(match).maybeSingle();
+      if (selErr) throw selErr;
+      if (existing && existing.id) {
+        // merge behavior: respect blank-value merge rules in updateNode
+        return await updateNode(user, existing.id as string, node);
+      }
+    }
+
+    // No match - create new
+    return await createNode(user, node as any);
+  } catch (err: unknown) {
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
+    return { success: false, error: { code: 'DB_ERROR', message } };
+  }
+}
+
+export async function findNodeByStableKeys(
+  node: Record<string, unknown>,
+  stableKeys?: string[]
+): Promise<ApiResponse<unknown>> {
+  try {
+    const keys = stableKeys && stableKeys.length ? stableKeys : getStableKeys();
+    const match: Record<string, unknown> = {};
+    for (const k of keys) {
+      if (k in node && node[k] !== undefined && node[k] !== null && node[k] !== '') {
+        match[k] = node[k] as unknown;
+      }
+    }
+
+    if (Object.keys(match).length === 0) return { success: true, data: null };
+
+    const { data, error } = await supabase.from('nodes').select('*').match(match).maybeSingle();
     if (error) throw error;
     return { success: true, data };
   } catch (err: unknown) {
