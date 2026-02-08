@@ -39,7 +39,7 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Typecheck
-        run: pnpm dlx typescript tsc --noEmit
+        run: pnpm --package=typescript dlx tsc --noEmit
 
       - name: Lint
         run: npx eslint OliveBranch --max-warnings=0
