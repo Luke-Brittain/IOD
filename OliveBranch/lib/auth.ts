@@ -3,7 +3,8 @@
  * Server-side authentication and simple RBAC helpers using Supabase.
  */
 
-import { getSupabaseServer } from '@/lib/supabase/client';
+import { getSupabaseServer } from './supabase/client';
+import { ROLE_PERMISSIONS } from '../config/roles';
 
 export async function requireAuth(req: Request) {
   const auth = req.headers.get('authorization');
@@ -24,13 +25,34 @@ export async function requireAuth(req: Request) {
     }
 
     return user;
-  } catch (err: any) {
-    throw { status: 401, message: err?.message ?? 'Authentication failed' };
+  } catch (err: unknown) {
+    const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Authentication failed';
+    throw { status: 401, message };
   }
 }
 
-export function hasRole(user: any, allowedRoles: string[]) {
-  const role = user?.user_metadata?.role || user?.app_metadata?.role || user?.role;
+export function hasRole(user: unknown, allowedRoles: string[]) {
+  if (typeof user !== 'object' || user === null) return false;
+  const u = user as Record<string, unknown>;
+  const userMeta = u.user_metadata as Record<string, unknown> | undefined;
+  const appMeta = u.app_metadata as Record<string, unknown> | undefined;
+  const role = (userMeta && (userMeta.role as string | undefined)) || (appMeta && (appMeta.role as string | undefined)) || (u.role as string | undefined);
   if (!role) return false;
   return allowedRoles.includes(role);
+}
+
+export function hasPermission(user: unknown, permission: string): boolean {
+  if (typeof user !== 'object' || user === null) return false;
+  const u = user as Record<string, unknown>;
+  const userMeta = u.user_metadata as Record<string, unknown> | undefined;
+  const appMeta = u.app_metadata as Record<string, unknown> | undefined;
+  const role = (userMeta && (userMeta.role as string | undefined)) || (appMeta && (appMeta.role as string | undefined)) || (u.role as string | undefined);
+  if (!role) return false;
+  const perms = ROLE_PERMISSIONS[role] ?? [];
+  if (perms.includes('admin:*')) return true;
+  if (perms.includes(permission)) return true;
+  // support simple wildcard on resource segments like nodes:*
+  const [res, action] = permission.split(':');
+  if (action && perms.some((p) => p === `${res}:*`)) return true;
+  return false;
 }

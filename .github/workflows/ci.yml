@@ -40,47 +40,22 @@ jobs:
 
       - name: Typecheck
         run: |
-          # Basic environment debug and redirect everything to a per-matrix log file so we can upload it.
-          mkdir -p logs
-          echo "Redirecting Typecheck output to logs/typecheck-${{ matrix.node-version }}.log"
-          exec > >(tee logs/typecheck-${{ matrix.node-version }}.log) 2>&1
-
+          # Run TypeScript checks for root and per-package tsconfig.json files
           node -v || true
           pnpm --version || true
 
-          # If there's a tsconfig at repo root, run the project build using explicit dlx -- syntax
           if [ -f tsconfig.json ]; then
             echo "Typechecking root project: tsconfig.json"
-            echo "Running: pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit"
             pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit
           fi
 
-          # Install dependencies in package folders so local types (react/@types/react) are available.
-          git ls-files -z '**/package.json' | while IFS= read -r -d '' pkg; do
-            dir=$(dirname "$pkg")
-            echo "Installing dependencies in: $dir"
-            pnpm install --prefix "$dir" --no-frozen-lockfile || true
-            echo "Package list in $dir:"
-            ls -la "$dir" || true
-            (cd "$dir" && pnpm list --depth=0) || true
-          done
-
-          # Run tsc for each project tsconfig inside its directory so TypeScript resolves local types
-          git ls-files -z '**/tsconfig.json' | while IFS= read -r -d '' cfg; do
+          git ls-files -z '**/tsconfig.json' | tr '\0' '\n' | grep -v '^removed-unused/' | while IFS= read -r cfg; do
             dir=$(dirname "$cfg")
             echo "Typechecking project in: $dir"
-            echo "Running in $dir: pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit"
             (cd "$dir" && pnpm dlx --package typescript -- tsc -p tsconfig.json --noEmit)
-            echo "Which tsc in $dir:"; (cd "$dir" && which tsc) || true
-            echo "List react deps in $dir:"; (cd "$dir" && pnpm list react @types/react --depth=0) || true
           done
 
-      - name: Upload Typecheck logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: typecheck-logs-${{ matrix.node-version }}
-          path: logs/typecheck-${{ matrix.node-version }}.log
+      # Removed debug log upload now that CI is stable
 
       - name: Lint
         run: pnpm exec eslint OliveBranch --max-warnings=0

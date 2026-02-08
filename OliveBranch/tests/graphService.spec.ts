@@ -19,7 +19,7 @@ describe('graphService (permission flows)', () => {
     vi.doMock('../lib/graph/client', () => ({ getSession: () => ({ run: async () => ({ records: [] }), close: async () => {} }) }));
 
     const { addEdge } = await import('../services/graphService');
-    const user = { id: 'u1', user_metadata: { role: 'viewer' } } as any;
+    const user = { id: 'u1', user_metadata: { role: 'viewer' } } as Record<string, unknown>;
     const res = await addEdge(user, 'from1', 'to1', 'REL');
     expect(res.success).toBe(false);
     expect(res.error?.code).toBe('FORBIDDEN');
@@ -39,7 +39,7 @@ describe('graphService (permission flows)', () => {
     }));
 
     const { addEdge } = await import('../services/graphService');
-    const user = { id: 's1', user_metadata: { role: 'steward' } } as any;
+    const user = { id: 's1', user_metadata: { role: 'steward' } } as Record<string, unknown>;
     const res = await addEdge(user, 'from1', 'to1', 'REL');
     expect(res.success).toBe(true);
     expect(res.data?.rel).toBeDefined();
