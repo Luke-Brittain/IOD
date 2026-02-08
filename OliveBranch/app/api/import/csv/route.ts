@@ -1,4 +1,4 @@
-import importCsvHandler from '../../../../generated/importCsvStub';
+import importCsvHandler from '../../../../generated/importCsvHandlerClean';
 
 export async function POST(request: Request) {
   return importCsvHandler(request);
