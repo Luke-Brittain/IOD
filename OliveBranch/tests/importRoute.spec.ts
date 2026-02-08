@@ -110,4 +110,51 @@ describe('import/csv route (dry-run)', () => {
     expect(statuses).toContain('would-update');
     expect(statuses).toContain('would-create');
   });
+
+  it('JSON dry-run matches by stable-keys and reports would-update', async () => {
+    vi.doMock('next/server', () => ({
+      NextResponse: { json: (body: unknown, init?: unknown) => new Response(JSON.stringify(body), init as any) },
+    }));
+
+    vi.doMock('@/lib/validation/schemas', () => ({
+      ImportRowsSchema: { safeParse: (b: any) => ({ success: !!b && Array.isArray(b.rows), data: b }) },
+      NodeCreateSchema: { safeParse: (p: any) => ({ success: typeof p?.name === 'string' && p.name.length > 0, data: p, error: { flatten: () => ({ formErrors: ['name required'] }) } }) },
+    }));
+
+    vi.doMock('@/lib/authMiddleware', () => ({
+      requirePermission: async () => ({ id: 'tester', user_metadata: { role: 'admin' } }),
+    }));
+
+    vi.doMock('@/services/nodeService', () => ({
+      findNodeByStableKeys: async (payload: any) => ({ success: true, data: { id: 'found' } }),
+      getNodeById: async (id: string) => ({ success: false, data: null }),
+      createNode: async () => ({ success: true, data: { id: 'created' } }),
+      updateNode: async () => ({ success: true, data: { id: 'updated' } }),
+      upsertNode: async () => ({ success: true, data: { id: 'found' } }),
+    }));
+
+    const route = await import('../app/api/import/csv/route');
+
+    const payload = {
+      stableKeys: ['external_id'],
+      rows: [
+        { external_id: 'ext-123', name: 'Existing by stable key' },
+      ],
+    };
+
+    const req = new Request('http://localhost/api/import/csv?dryRun=true', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    const res = await route.POST(req as unknown as Request);
+    const body = await (res as Response).json();
+    expect(body.success).toBe(true);
+    expect(body.data.summary.processed).toBe(1);
+    expect(body.data.summary.updated).toBe(1);
+    const row = (body.data.rows as Array<any>)[0];
+    expect(row.status).toBe('would-update');
+    expect(row.note).toBe('matched_by_stable_keys');
+  });
 });
