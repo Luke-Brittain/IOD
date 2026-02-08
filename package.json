@@ -1,7 +1,7 @@
 {
   "name": "iod-workspace",
   "private": true,
-  "packageManager": "pnpm@8",
+  "packageManager": "pnpm@10",
   "workspaces": ["prototype"],
   "scripts": {
     "dev:prototype": "pnpm --filter prototype dev",
