@@ -32,6 +32,10 @@ describe('import/csv route (non-dry-run integration)', () => {
       getNodeById: async (id: string) => ({ success: id === 'exists', data: id === 'exists' ? { id: 'exists' } : null }),
       createNode: createMock,
       updateNode: updateMock,
+      upsertNode: async (user: any, payload: any) => {
+        if (payload.id) return updateMock(user, payload.id, payload);
+        return createMock(user, payload);
+      },
     }));
 
     const route = await import('../app/api/import/csv/route');

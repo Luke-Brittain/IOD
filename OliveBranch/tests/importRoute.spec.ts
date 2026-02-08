@@ -29,6 +29,7 @@ describe('import/csv route (dry-run)', () => {
       getNodeById: async (id: string) => ({ success: id === 'exists', data: id === 'exists' ? { id: 'exists' } : null }),
       createNode: async () => ({ success: true, data: { id: 'created' } }),
       updateNode: async () => ({ success: true, data: { id: 'exists' } }),
+      upsertNode: async (user: any, payload: any) => ({ success: true, data: { id: payload.id ?? 'created' } }),
     }));
 
     const route = await import('../app/api/import/csv/route');
@@ -79,6 +80,7 @@ describe('import/csv route (dry-run)', () => {
       getNodeById: async (id: string) => ({ success: id === 'exists', data: id === 'exists' ? { id: 'exists' } : null }),
       createNode: async () => ({ success: true, data: { id: 'created' } }),
       updateNode: async () => ({ success: true, data: { id: 'exists' } }),
+      upsertNode: async (user: any, payload: any) => ({ success: true, data: { id: payload.id ?? 'created' } }),
     }));
 
     const route = await import('../app/api/import/csv/route');
