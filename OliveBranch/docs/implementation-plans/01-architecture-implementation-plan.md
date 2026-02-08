@@ -156,6 +156,99 @@ Response (200):
 
 ---
 
+## Route-level Examples & OpenAPI
+
+An OpenAPI description for the MVP routes has been added at `docs/api/openapi.yaml` and can be used to generate server/client stubs or validate requests.
+
+Expanded route examples (representative):
+
+GET /api/nodes (role-scoped)
+
+Request:
+```
+GET /api/nodes?roleScoped=true&seedPir=pir_21&cap=50
+Authorization: Bearer <JWT>
+```
+
+Response (200):
+```json
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      { "id": "sys_1", "type": "System", "name": "Payments System" },
+      { "id": "ds_9", "type": "Dataset", "name": "Payments Dataset" }
+    ],
+    "edges": [
+      { "from": "sys_1", "to": "ds_9", "type": "contains" }
+    ]
+  }
+}
+```
+
+PATCH /api/nodes/:id (update metadata)
+
+Request:
+```
+PATCH /api/nodes/field_22
+Content-Type: application/json
+Authorization: Bearer <JWT>
+
+{ "pii": true, "dataType": "string" }
+```
+
+Response (200):
+```json
+{ "success": true, "data": { "id": "field_22", "pii": true } }
+```
+
+GET /api/graph/traverse
+
+Request:
+```
+GET /api/graph/traverse?nodeId=table_12&direction=upstream&depth=3
+Authorization: Bearer <JWT>
+```
+
+Response (200):
+```json
+{ "success": true, "data": { "traversal": { /* nodes + edges */ } } }
+```
+
+POST /api/graph/edge
+
+Request:
+```
+POST /api/graph/edge
+Content-Type: application/json
+Authorization: Bearer <JWT>
+
+{ "fromId": "ds_9", "toId": "table_12", "type": "contains" }
+```
+
+Response (201):
+```json
+{ "success": true, "data": { "edgeId": "e_901" } }
+```
+
+POST /api/import/csv (multipart)
+
+Request: multipart/form-data with `file` field containing CSV template.
+
+Response (200 sample):
+```json
+{
+  "success": true,
+  "data": {
+    "summary": { "processed": 10, "created": 2, "updated": 6, "errors": 2 },
+    "rows": [ { "row": 1, "status": "updated" }, { "row": 2, "status": "error", "code": "INVALID_PII" } ]
+  }
+}
+```
+
+Refer to `docs/api/openapi.yaml` for schemas and full route parameter/response definitions.
+
+
 ## Testing Strategy
 - Unit tests: services, validation, helpers (Vitest).
 - DOM tests: `Canvas` and `DetailsPanel` interactions (jsdom).
