@@ -8,7 +8,25 @@ OliveBranch provides a visual canvas-based interface for managing data assets, r
 
 ## Repository Setup
 
-This repository follows a standard Git workflow:
+This repository follows a standard Git workflow. For detailed instructions on setting up branches for PR creation, see [SETUP.md](SETUP.md).
+
+### Quick Setup for PR Creation
+
+To enable the GitHub CLI PR creation workflow:
+
+1. Ensure `main` branch exists on remote (see [SETUP.md](SETUP.md) for details)
+2. Create `feature/setup-github` branch from `main`
+3. Make commits on the feature branch
+4. Run the PR creation command:
+
+```bash
+gh pr create --repo Luke-Brittain/OliveBranch \
+  --title "Your PR Title" \
+  --body "Your PR Description" \
+  --base main \
+  --head feature/setup-github \
+  --reviewer Luke-Brittain
+```
 
 ### Branches
 
@@ -16,7 +34,7 @@ This repository follows a standard Git workflow:
 - `feature/*` - Feature development branches
 - `fix/*` - Bug fix branches
 
-### Getting Started
+### Getting Started with GitHub CLI
 
 1. **Authentication**: Ensure you're logged into GitHub CLI
    ```bash
@@ -24,7 +42,7 @@ This repository follows a standard Git workflow:
    gh auth status --hostname github.com
    ```
 
-2. **Creating a Pull Request**: Use the GitHub CLI to create PRs
+2. **Creating a Pull Request**: Use the GitHub CLI to create PRs (after completing setup in [SETUP.md](SETUP.md))
    ```bash
    gh pr create --repo Luke-Brittain/OliveBranch \
      --title "Your PR Title" \
