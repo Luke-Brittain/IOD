@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createNode, updateNode, getNodeById } from '@/services/nodeService';
 import { requirePermission } from '@/lib/authMiddleware';
+import { parse } from 'csv-parse';
+import { Readable } from 'stream';
 
 export async function POST(req: Request) {
   try {
@@ -82,58 +84,40 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: false, error: { code: 'FILE_TOO_LARGE', message: 'Uploaded file exceeds the 5MB size limit.' } }, { status: 413 });
       }
 
-      const text = await file.text();
-
-      // Simple CSV parser that handles quoted fields and double-quote escaping.
-      // TODO: Replace this lightweight parser with an RFC4180-capable streaming parser
-      // (e.g., papaparse or csv-parse) for production and support embedded newlines.
-      function parseLine(line: string): string[] {
-        const out: string[] = [];
-        let cur = '';
-        let inQuotes = false;
-        for (let i = 0; i < line.length; i++) {
-          const ch = line[i];
-          if (ch === '"') {
-            if (inQuotes && line[i + 1] === '"') {
-              cur += '"';
-              i++; // skip escaped quote
-            } else {
-              inQuotes = !inQuotes;
-            }
-          } else if (ch === ',' && !inQuotes) {
-            out.push(cur);
-            cur = '';
-          } else {
-            cur += ch;
-          }
-        }
-        out.push(cur);
-        return out.map((s) => s.trim());
+      // Prefer streaming parsing when available to handle large files and embedded newlines.
+      let rows: Record<string, string>[] = [];
+      const webStream = (file as any).stream?.();
+      if (webStream && typeof Readable.fromWeb === 'function') {
+        // Convert WHATWG ReadableStream to Node Readable
+        const nodeStream = Readable.fromWeb(webStream as any) as NodeJS.ReadableStream;
+        const parser = parse({ columns: true, relax_quotes: true, skip_empty_lines: true, trim: true });
+        // Pipe and collect records
+        const records: Record<string, string>[] = [];
+        await new Promise<void>((resolve, reject) => {
+          nodeStream.pipe(parser as any)
+            .on('data', (rec: Record<string, string>) => records.push(rec))
+            .on('end', () => resolve())
+            .on('error', (err: unknown) => reject(err));
+        });
+        rows = records;
+      } else {
+        // Fallback: read text and parse with csv-parse (sync-like via callback)
+        const text = await file.text();
+        await new Promise<void>((resolve, reject) => {
+          const records: Record<string, string>[] = [];
+          parse(text, { columns: true, relax_quotes: true, skip_empty_lines: true, trim: true })
+            .on('readable', function (this: any) {
+              let record;
+              // eslint-disable-next-line no-cond-assign
+              while ((record = this.read())) records.push(record as Record<string, string>);
+            })
+            .on('error', (err: unknown) => reject(err))
+            .on('end', () => {
+              rows = records;
+              resolve();
+            });
+        });
       }
-
-      function parseCSV(csv: string): Record<string, string>[] {
-        const lines = csv.split(/\r\n|\n/);
-        if (lines.length === 0) return [];
-        // find first non-empty line as header
-        let headerLine = '';
-        while (lines.length && headerLine.trim() === '') headerLine = lines.shift() ?? '';
-        if (!headerLine) return [];
-        const headers = parseLine(headerLine).map((h) => h || '');
-        const rows: Record<string, string>[] = [];
-        for (const l of lines) {
-          if (l.trim() === '') continue;
-          const cols = parseLine(l);
-          const row: Record<string, string> = {};
-          for (let i = 0; i < headers.length; i++) {
-            const key = headers[i] || `col_${i}`;
-            row[key] = cols[i] ?? '';
-          }
-          rows.push(row);
-        }
-        return rows;
-      }
-
-      let rows = parseCSV(text);
       // Normalize header keys to snake_case-ish lower keys to match schema expectations
       rows = rows.map((r) => {
         const out: Record<string, string> = {};
