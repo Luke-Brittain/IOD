@@ -7,7 +7,7 @@ import type { ApiResponse } from '../types/nodes';
 import type { System, Dataset, Table, Field, CalculatedMetric } from '../types/nodes';
 import { getSupabaseServer } from '../lib/supabase/client';
 import { hasPermission } from '../lib/auth';
-import { getStableKeys } from '@/config/stableKeys';
+import { getStableKeys } from '../config/stableKeys';
 
 const supabase = getSupabaseServer();
 
