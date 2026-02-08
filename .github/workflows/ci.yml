@@ -43,16 +43,22 @@ jobs:
           # If there's a tsconfig at repo root, run the project build.
           if [ -f tsconfig.json ]; then
             pnpm --package=typescript dlx tsc -p tsconfig.json --noEmit
-          else
-            # First, run tsc for any found tsconfig.json files (per-project)
-            git ls-files -z '**/tsconfig.json' | xargs -0 -n 1 -I{} pnpm --package=typescript dlx tsc -p {} --noEmit || true
-
-            # Then, for any remaining .ts/.tsx files, run tsc individually in a null-delimited loop
-            # This avoids any argument-list splitting issues.
-            git ls-files -z '*.ts' '*.tsx' | while IFS= read -r -d '' file; do
-              pnpm --package=typescript dlx tsc --noEmit -- "$file" || true
-            done
           fi
+
+          # Install dependencies and run tsc in each package/tsconfig directory discovered in the repo.
+          # This ensures per-project node_modules (and types like react/@types/react) are available.
+          git ls-files -z '**/package.json' | while IFS= read -r -d '' pkg; do
+            dir=$(dirname "$pkg")
+            echo "Installing dependencies in: $dir"
+            pnpm install --prefix "$dir" --no-frozen-lockfile || true
+          done
+
+          # Run tsc for each project tsconfig inside its directory so TypeScript resolves local types
+          git ls-files -z '**/tsconfig.json' | while IFS= read -r -d '' cfg; do
+            dir=$(dirname "$cfg")
+            echo "Typechecking project in: $dir"
+            (cd "$dir" && pnpm --package=typescript dlx tsc -p tsconfig.json --noEmit) || true
+          done
 
       - name: Lint
         run: npx eslint OliveBranch --max-warnings=0
