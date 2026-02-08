@@ -1,0 +1,27 @@
+{
+  "name": "iod-workspace",
+  "private": true,
+  "packageManager": "pnpm@8",
+  "workspaces": ["prototype"],
+  "scripts": {
+    "dev:prototype": "pnpm --filter prototype dev",
+    "prepare": "husky install",
+    "lint": "pnpm --filter prototype run lint"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.32.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "prettier": "^3.0.0"
+  },
+  "lint-staged": {
+    "prototype/src/**/*.{ts,tsx,js,jsx}": [
+      "pnpm --filter prototype exec eslint --fix",
+      "pnpm --filter prototype exec prettier --write"
+    ]
+  }
+}
