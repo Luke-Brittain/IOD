@@ -6,7 +6,17 @@ A data governance and metadata management system for tracking dataset ownership,
 
 OliveBranch provides a visual canvas-based interface for managing data assets, relationships, and governance policies across your organization.
 
-## Repository Setup
+## Quick Start
+
+### For PR Creation Workflow
+
+If you're here to set up branches for creating pull requests:
+
+1. **Run the setup script**: `.\scripts\setup-branches.ps1` (PowerShell) or `./scripts/setup-branches.sh` (Bash)
+2. **Create your PR**: See [PR_COMMAND_REFERENCE.md](PR_COMMAND_REFERENCE.md) for the exact command
+3. **Need help?**: See [SETUP.md](SETUP.md) for detailed instructions
+
+### Repository Setup
 
 This repository follows a standard Git workflow. For detailed instructions on setting up branches for PR creation, see [SETUP.md](SETUP.md).
 
