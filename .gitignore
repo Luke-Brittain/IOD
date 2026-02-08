@@ -17,3 +17,4 @@ package-lock.json
 *.iml
 /.cache
 public/brand/*.svg
+removed-unused/Calndar 2/
