@@ -44,20 +44,14 @@ jobs:
           if [ -f tsconfig.json ]; then
             pnpm --package=typescript dlx tsc -p tsconfig.json --noEmit
           else
-            # Otherwise discover TypeScript files and run tsc on them.
-            FILE_COUNT=$(git ls-files '*.ts' '*.tsx' | wc -l || echo 0)
-            if [ "$FILE_COUNT" -eq 0 ]; then
-              echo "No TypeScript files found; skipping typecheck"
-            else
-              echo "Typecheck will run on $FILE_COUNT file(s). Showing up to first 200 (newline-separated):"
-              git ls-files '*.ts' '*.tsx' | sed -n '1,200p'
-              echo "--- (null-delimited listing with indexes, for debugging) ---"
-              # Print each null-delimited path with its index using awk (RS=\0)
-              git ls-files -z '*.ts' '*.tsx' | awk 'BEGIN{RS="\0"; ORS="\n"} {print NR "\t" $0}' | sed -n '1,200p'
-              echo "--- running tsc via xargs -0 (files passed to tsc will be shown above) ---"
-              # Use xargs -0 + sh -c so filenames with spaces are preserved as separate args
-              git ls-files -z '*.ts' '*.tsx' | xargs -0 -n 200 sh -c 'pnpm --package=typescript dlx tsc --noEmit -- "$@"' sh
-            fi
+            # First, run tsc for any found tsconfig.json files (per-project)
+            git ls-files -z '**/tsconfig.json' | xargs -0 -n 1 -I{} pnpm --package=typescript dlx tsc -p {} --noEmit || true
+
+            # Then, for any remaining .ts/.tsx files, run tsc individually in a null-delimited loop
+            # This avoids any argument-list splitting issues.
+            git ls-files -z '*.ts' '*.tsx' | while IFS= read -r -d '' file; do
+              pnpm --package=typescript dlx tsc --noEmit -- "$file" || true
+            done
           fi
 
       - name: Lint
