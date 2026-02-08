@@ -3,9 +3,9 @@
  * Graph traversal and edge management for lineage topology.
  */
 
-import { getSession } from '@/lib/graph/client';
-import type { ApiResponse } from '@/types/nodes';
-import { getNodeById } from '@/services/nodeService';
+import { getSession } from '../lib/graph/client';
+import type { ApiResponse } from '../types/nodes';
+import { getNodeById } from './nodeService';
 
 /**
  * Traverse upstream or downstream from a nodeId to a given depth.

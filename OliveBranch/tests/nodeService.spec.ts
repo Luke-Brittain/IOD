@@ -10,7 +10,7 @@ describe('nodeService (permission flows)', () => {
   });
 
   it('createNode: rejects viewer role', async () => {
-    vi.doMock('@/lib/supabase/client', () => ({
+    vi.doMock('../lib/supabase/client', () => ({
       getSupabaseServer: () => ({
         from: () => ({
           insert: () => ({ select: () => ({ single: async () => ({ data: null, error: null }) }) }),
@@ -18,7 +18,7 @@ describe('nodeService (permission flows)', () => {
       }),
     }));
 
-    const { createNode } = await import('@/services/nodeService');
+    const { createNode } = await import('../services/nodeService');
     const user = { id: 'u1', user_metadata: { role: 'viewer' } } as any;
     const res = await createNode(user, { name: 'Test' } as any);
     expect(res.success).toBe(false);
@@ -26,7 +26,7 @@ describe('nodeService (permission flows)', () => {
   });
 
   it('createNode: allows editor and returns data', async () => {
-    vi.doMock('@/lib/supabase/client', () => ({
+    vi.doMock('../lib/supabase/client', () => ({
       getSupabaseServer: () => ({
         from: () => ({
           insert: (node: any) => ({ select: () => ({ single: async () => ({ data: { id: 'n1', ...node }, error: null }) }) }),
@@ -34,7 +34,7 @@ describe('nodeService (permission flows)', () => {
       }),
     }));
 
-    const { createNode } = await import('@/services/nodeService');
+    const { createNode } = await import('../services/nodeService');
     const user = { id: 'u2', user_metadata: { role: 'editor' } } as any;
     const res = await createNode(user, { name: 'Created' } as any);
     expect(res.success).toBe(true);
@@ -44,7 +44,7 @@ describe('nodeService (permission flows)', () => {
   it('updateNode: forbids when not owner/steward and insufficient role', async () => {
     const testNode = { id: 'n2', ownerId: 'someone', stewards: [] };
 
-    vi.doMock('@/lib/supabase/client', () => ({
+    vi.doMock('../lib/supabase/client', () => ({
       getSupabaseServer: () => ({
         from: () => ({
           select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: testNode, error: null }) }) }),
@@ -53,7 +53,7 @@ describe('nodeService (permission flows)', () => {
       }),
     }));
 
-    const { updateNode } = await import('@/services/nodeService');
+    const { updateNode } = await import('../services/nodeService');
     const user = { id: 'uX', user_metadata: { role: 'viewer' } } as any;
 
     const res = await updateNode(user, 'n2', { name: 'x' });
@@ -64,7 +64,7 @@ describe('nodeService (permission flows)', () => {
   it('updateNode: allows owner to update', async () => {
     const testNode = { id: 'n3', ownerId: 'own1', stewards: [] };
 
-    vi.doMock('@/lib/supabase/client', () => ({
+    vi.doMock('../lib/supabase/client', () => ({
       getSupabaseServer: () => ({
         from: () => ({
           select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: testNode, error: null }) }) }),
@@ -73,7 +73,7 @@ describe('nodeService (permission flows)', () => {
       }),
     }));
 
-    const { updateNode } = await import('@/services/nodeService');
+    const { updateNode } = await import('../services/nodeService');
     const user = { id: 'own1', user_metadata: { role: 'viewer' } } as any; // owner should be allowed
 
     const res = await updateNode(user, 'n3', { description: 'updated' });

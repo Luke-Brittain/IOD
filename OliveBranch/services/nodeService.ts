@@ -3,9 +3,9 @@
  * Business-layer functions for node CRUD and listing. Uses Supabase for attribute storage and Neo4j for topology where needed.
  */
 
-import type { ApiResponse } from '@/types/nodes';
-import type { System, Dataset, Table, Field, CalculatedMetric } from '@/types/nodes';
-import { getSupabaseServer } from '@/lib/supabase/client';
+import type { ApiResponse } from '../types/nodes';
+import type { System, Dataset, Table, Field, CalculatedMetric } from '../types/nodes';
+import { getSupabaseServer } from '../lib/supabase/client';
 
 const supabase = getSupabaseServer();
 
