@@ -129,6 +129,8 @@ components:
           type: integer
         status:
           type: string
+        note:
+          type: string
         code:
           type: string
         message:
@@ -216,7 +218,18 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
   /api/import/csv:
     post:
-      summary: Upload CSV template (multipart)
+      summary: Upload CSV template (multipart or JSON) with optional dry-run and stable-key upsert
+      parameters:
+        - in: query
+          name: dryRun
+          schema:
+            type: boolean
+          description: If true, returns a preview of actions (`would-create` / `would-update`) without persisting
+        - in: query
+          name: stableKeys
+          schema:
+            type: string
+          description: Comma-separated list of stable key column names to use for upsert matching (overrides server config)
       requestBody:
         required: true
         content:
@@ -227,6 +240,31 @@ paths:
                 file:
                   type: string
                   format: binary
+                stableKeys:
+                  type: string
+                  description: Optional comma-separated stable key names in form data
+          application/json:
+            schema:
+              type: object
+              properties:
+                stableKeys:
+                  oneOf:
+                    - type: string
+                      description: Comma-separated stable key names
+                    - type: array
+                      items:
+                        type: string
+                rows:
+                  type: array
+                  items:
+                    type: object
+              example:
+                stableKeys: ["external_id"]
+                rows:
+                  - id: "exists"
+                    name: "Existing"
+                  - external_id: "ext-123"
+                    name: "New"
       responses:
         '200':
           description: Import result
