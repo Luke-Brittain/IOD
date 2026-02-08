@@ -23,6 +23,14 @@ module.exports = {
     afterEach: 'readonly',
     vi: 'readonly'
   },
+  overrides: [
+    {
+      files: ['OliveBranch/**', '**/*.spec.ts', '**/*.spec.tsx'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off'
+      }
+    }
+  ],
   rules: {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],

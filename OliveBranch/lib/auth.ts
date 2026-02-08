@@ -15,7 +15,7 @@ export async function requireAuth(req: Request) {
   try {
     // supabase.auth.getUser accepts either an access token or object depending on SDK version.
     // Try common call patterns; adapt if your supabase client differs.
-    // @ts-ignore
+    // @ts-expect-error - supabase SDK may expose getUser differently across versions
     const result = await supabase.auth.getUser(token);
     const user = result?.data?.user ?? result?.user ?? null;
 
