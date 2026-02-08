@@ -1,0 +1,41 @@
+import { NextResponse } from 'next/server';
+import { listNodesRoleScoped, createNode } from '@/services/nodeService';
+
+function requireAuth(req: Request) {
+  const auth = req.headers.get('authorization');
+  if (!auth) throw { status: 401, message: 'Unauthorized' };
+  return auth.replace('Bearer ', '');
+}
+
+export async function GET(req: Request) {
+  try {
+    requireAuth(req);
+    const url = new URL(req.url);
+    const roleScoped = url.searchParams.get('roleScoped') === 'true';
+    const seedPir = url.searchParams.get('seedPir') ?? undefined;
+    const cap = parseInt(url.searchParams.get('cap') ?? '100', 10);
+
+    const res = await listNodesRoleScoped(roleScoped ? seedPir : undefined, cap);
+    return NextResponse.json(res);
+  } catch (err: any) {
+    const status = err?.status ?? 500;
+    return NextResponse.json({ success: false, error: { code: 'ERR', message: err?.message ?? 'Unknown' } }, { status });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    requireAuth(req);
+    const body = await req.json();
+    if (!body || typeof body !== 'object') {
+      return NextResponse.json({ success: false, error: { code: 'INVALID_BODY', message: 'Expected JSON body' } }, { status: 400 });
+    }
+
+    const res = await createNode(body);
+    const status = res.success ? 201 : 500;
+    return NextResponse.json(res, { status });
+  } catch (err: any) {
+    const status = err?.status ?? 500;
+    return NextResponse.json({ success: false, error: { code: 'ERR', message: err?.message ?? 'Unknown' } }, { status });
+  }
+}
