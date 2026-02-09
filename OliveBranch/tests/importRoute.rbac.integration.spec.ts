@@ -1,4 +1,6 @@
+// Use unknown-typed mocks to avoid explicit `any` usage
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 describe('import/csv route (rbac rejection)', () => {
   beforeEach(() => {
@@ -13,7 +15,7 @@ describe('import/csv route (rbac rejection)', () => {
 
   it('returns 403 when requirePermission throws', async () => {
     vi.doMock('next/server', () => ({
-      NextResponse: { json: (body: unknown, init?: unknown) => new Response(JSON.stringify(body), init as any) },
+      NextResponse: { json: (body: unknown, init?: unknown) => new Response(JSON.stringify(body), init as unknown as ResponseInit) },
     }));
 
     vi.doMock('@/lib/authMiddleware', () => ({
@@ -22,12 +24,12 @@ describe('import/csv route (rbac rejection)', () => {
 
     // minimal schema mock so route doesn't fail earlier
     vi.doMock('@/lib/validation/schemas', () => ({
-      ImportRowsSchema: { safeParse: (b: any) => ({ success: !!b && Array.isArray(b.rows), data: b }) },
+      ImportRowsSchema: { safeParse: (b: unknown) => ({ success: !!b && Array.isArray((b as Record<string, unknown>).rows), data: b }) },
     }));
 
     // mock nodeService so imports resolve
     vi.doMock('@/services/nodeService', () => ({
-      getNodeById: async (id: string) => ({ success: false, data: null }),
+      getNodeById: async (_id: string) => ({ success: false, data: null }),
       createNode: async () => ({ success: true, data: { id: 'created' } }),
       updateNode: async () => ({ success: true, data: { id: 'updated' } }),
       findNodeByStableKeys: async () => ({ success: true, data: null }),

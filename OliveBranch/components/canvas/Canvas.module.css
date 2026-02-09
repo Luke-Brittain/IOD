@@ -48,3 +48,16 @@
   border-radius: 2px;
   background: var(--color-cerulean);
 }
+
+.nodeLabel {
+  flex: 1;
+}
+
+.nodeGrab {
+  cursor: grab;
+}
+
+.nodeGrabbing {
+  cursor: grabbing;
+  z-index: 999;
+}

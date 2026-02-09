@@ -4,13 +4,13 @@ import { createRoot } from 'react-dom/client';
 import DetailsPanel from '../components/details/DetailsPanel';
 
 describe('DetailsPanel UI', () => {
-  let originalFetch: any;
+  let originalFetch: typeof fetch | undefined;
 
   beforeEach(() => {
     originalFetch = globalThis.fetch;
   });
   afterEach(() => {
-    globalThis.fetch = originalFetch;
+    if (originalFetch) globalThis.fetch = originalFetch;
   });
 
   it('loads node details and performs PATCH on save', async () => {
@@ -20,12 +20,14 @@ describe('DetailsPanel UI', () => {
 
     const sample = { success: true, data: { id: 'n1', name: 'Node 1' } };
 
-    globalThis.fetch = vi.fn((url: string, opts?: any) => {
-      if (opts && opts.method === 'PATCH') {
+    const fetchMock = vi.fn((url: string, opts?: unknown) => {
+      const method = (opts as Record<string, unknown>)?.['method'] as string | undefined;
+      if (method === 'PATCH') {
         return Promise.resolve(new Response(JSON.stringify({ success: true, data: { id: 'n1', name: 'Updated' } }), { status: 200 }));
       }
       return Promise.resolve(new Response(JSON.stringify(sample), { status: 200 }));
     });
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
 
     await new Promise<void>((resolve) => {
       root.render(<DetailsPanel nodeId={'n1'} onClose={resolve} />);
@@ -57,7 +59,10 @@ describe('DetailsPanel UI', () => {
     }
 
     // PATCH should have been called
-    expect((globalThis.fetch as any).mock.calls.some((c: any[]) => c[1] && c[1].method === 'PATCH')).toBe(true);
+    // assert against the mocked function we installed
+    const fm = fetchMock as unknown as { mock?: { calls?: unknown[][] } };
+    const calls = fm.mock?.calls ?? [];
+    expect(calls.some((c) => (c[1] as Record<string, unknown>)?.['method'] === 'PATCH')).toBe(true);
 
     root.unmount();
   });

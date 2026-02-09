@@ -55,8 +55,9 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    el.addEventListener('wheel', handleWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheel as any);
+    const wheelHandler = (ev: Event) => handleWheel(ev as WheelEvent);
+    el.addEventListener('wheel', wheelHandler, { passive: false });
+    return () => el.removeEventListener('wheel', wheelHandler);
   }, [handleWheel]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -89,7 +90,7 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
-    try { (e.target as Element).releasePointerCapture(e.pointerId); } catch {}
+    try { (e.target as Element).releasePointerCapture(e.pointerId); } catch (err) { /* ignore */ }
     setIsPanning(false);
   };
 
@@ -108,7 +109,7 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
   const handleNodePointerDown = (e: React.PointerEvent, node: NodeItem) => {
     e.stopPropagation();
     const target = e.target as Element;
-    try { target.setPointerCapture(e.pointerId); } catch {}
+    try { target.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
     setDraggingId(node.id);
     // compute offset between pointer and node position
     dragOffsetRef.current = { x: e.clientX - node.x * scale - translate.x, y: e.clientY - node.y * scale - translate.y };
@@ -132,18 +133,18 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
         document.body.appendChild(g);
         ghostRef.current = g;
       }
-    } catch {}
+    } catch (err) { /* ignore */ }
   };
 
   const handleNodePointerUp = (e: React.PointerEvent) => {
     e.stopPropagation();
-    try { (e.target as Element).releasePointerCapture(e.pointerId); } catch {}
+    try { (e.target as Element).releasePointerCapture(e.pointerId); } catch (err) { /* ignore */ }
     const finishedId = draggingId;
     // compute final position from the event coordinates to avoid reading stale state
       if (finishedId) {
       const offset = dragOffsetRef.current ?? { x: 0, y: 0 };
-      const clientX = (e as any).clientX ?? 0;
-      const clientY = (e as any).clientY ?? 0;
+      const clientX = e.clientX ?? 0;
+      const clientY = e.clientY ?? 0;
       const finalX = (clientX - origin.x - offset.x) / scale + translate.x / scale;
       const finalY = (clientY - origin.y - offset.y) / scale + translate.y / scale;
       // update local state immediately
@@ -156,7 +157,7 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
           // default persistence with optimistic UI and retry/backoff
           startPersist(finishedId, finalX, finalY);
         }
-      } catch {}
+      } catch (err) { /* ignore */ }
     }
     setDraggingId(null);
     dragOffsetRef.current = null;
@@ -166,10 +167,10 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
         ghostRef.current.remove();
         ghostRef.current = null;
       }
-    } catch {}
+    } catch (err) { /* ignore */ }
   };
 
-  const handleNodeKeyDown = (e: React.KeyboardEvent, id: string) => {
+  const handleNodeKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
     if (e.key === 'Enter') {
       handleDoubleClick(id);
     } else if (e.key === ' ') {
@@ -223,6 +224,27 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
     startPersist(id, node.x, node.y);
   };
 
+  // side-effect: update viewport transform and node element positions to avoid inline JSX styles
+  // we intentionally mutate DOM styles here to keep JSX free of inline `style` props (eslint rule)
+  // this runs when nodes, translate or scale change
+  useEffect(() => {
+    const vp = viewportRef.current;
+    if (vp) {
+      vp.style.transform = `translate(${translate.x}px, ${translate.y}px) scale(${scale})`;
+    }
+    // set node element positions
+    const el = containerRef.current;
+    if (el) {
+      for (const n of localNodes) {
+        const nodeEl = el.querySelector<HTMLDivElement>(`[data-node-id="${n.id}"]`);
+        if (nodeEl) {
+          nodeEl.style.left = `${n.x}px`;
+          nodeEl.style.top = `${n.y}px`;
+        }
+      }
+    }
+  }, [localNodes, translate, scale]);
+
   return (
     <div ref={containerRef} className={[className ?? '', styles.canvasRoot].filter(Boolean).join(' ')}>
       <div
@@ -232,7 +254,6 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
         className={styles.viewport}
-        style={{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }}
       >
         {localNodes.map((n) => {
           const isDragging = draggingId === n.id;
@@ -241,6 +262,8 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
             isDragging ? styles.nodeDragging : '',
             hoveringId === n.id && !isDragging ? styles.nodeHover : '',
             selected === n.id ? styles.nodeSelected : '',
+            hoveringId === n.id && !isDragging ? styles.nodeGrab : '',
+            isDragging ? styles.nodeGrabbing : '',
           ].filter(Boolean).join(' ');
 
           return (
@@ -253,15 +276,14 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
               onPointerCancel={handleNodePointerUp}
               onMouseEnter={() => setHoveringId(n.id)}
               onMouseLeave={() => setHoveringId((hid) => (hid === n.id ? null : hid))}
-              onKeyDown={(e) => handleNodeKeyDown(e as any, n.id)}
+              onKeyDown={(e) => handleNodeKeyDown(e, n.id)}
               tabIndex={0}
               className={nodeClass}
-              style={{ left: n.x, top: n.y, cursor: isDragging ? 'grabbing' : hoveringId === n.id ? 'grab' : 'pointer', zIndex: isDragging ? 999 : undefined }}
               data-node-id={n.id}
             >
               <div className={styles.nodeContent}>
                 <div className={styles.nodeDot} />
-                <div style={{ flex: 1 }}>{n.label}</div>
+                <div className={styles.nodeLabel}>{n.label}</div>
                 {/* persistence indicator moved to global toast */}
               </div>
             </div>

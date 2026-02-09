@@ -18,6 +18,24 @@
   box-shadow: 0 12px 40px rgba(2,18,22,0.12);
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: translateY(8px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.overlay {
+  animation: fadeIn 180ms var(--transition-fast, ease) both;
+}
+
+.dialog {
+  animation: scaleIn 220ms var(--transition-base, cubic-bezier(.2,.9,.2,1)) both;
+}
+
 .header {
   display: flex;
   align-items: center;

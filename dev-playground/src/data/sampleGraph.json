@@ -1,0 +1,102 @@
+{
+  "nodes": [
+    {
+      "id": "n1",
+      "x": 140,
+      "y": 120,
+      "label": "Alice Johnson",
+      "type": "person",
+      "name": "Alice Johnson",
+      "title": "Senior Software Engineer",
+      "email": "alice.johnson@example.com",
+      "phone": "+1-415-555-0123",
+      "createdAt": "2022-08-12T09:24:00Z",
+      "bio": "Full-stack engineer focused on realtime systems and graph analytics.",
+      "location": { "city": "San Francisco", "country": "USA" },
+      "skills": ["javascript", "typescript", "react", "d3"],
+      "tags": ["engineer", "team-a"],
+      "metrics": { "activityScore": 82, "projects": 6 }
+    },
+    {
+      "id": "n2",
+      "x": 360,
+      "y": 80,
+      "label": "Bob Martin",
+      "type": "person",
+      "name": "Bob Martin",
+      "title": "Consultant",
+      "email": "bob.martin@consults.io",
+      "phone": "+61-2-9000-1234",
+      "createdAt": "2020-03-01T12:00:00Z",
+      "bio": "Independent consultant working with product and ops teams.",
+      "location": { "city": "Sydney", "country": "Australia" },
+      "skills": ["strategy", "data", "neo4j"],
+      "tags": ["consultant"],
+      "metrics": { "activityScore": 64, "clients": 12 }
+    },
+    {
+      "id": "n3",
+      "x": 260,
+      "y": 300,
+      "label": "Company X",
+      "type": "org",
+      "name": "Company X Pty Ltd",
+      "industry": "SaaS",
+      "website": "https://companyx.example.com",
+      "employees": 85,
+      "revenueUSD": 12500000,
+      "founded": 2016,
+      "location": { "city": "Melbourne", "country": "Australia" },
+      "tags": ["customer", "enterprise"]
+    },
+    {
+      "id": "n4",
+      "x": 520,
+      "y": 200,
+      "label": "Carol Ng",
+      "type": "person",
+      "name": "Carol Ng",
+      "title": "Founder & CEO",
+      "email": "carol@companyx.example.com",
+      "createdAt": "2015-11-05T08:00:00Z",
+      "bio": "Serial entrepreneur and investor.",
+      "location": { "city": "Melbourne", "country": "Australia" },
+      "tags": ["founder", "executive"]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "n1",
+      "target": "n2",
+      "label": "knows",
+      "weight": 0.6,
+      "since": "2019-06-01"
+    },
+    {
+      "id": "e2",
+      "source": "n1",
+      "target": "n3",
+      "label": "works_at",
+      "role": "engineer",
+      "since": "2021-02-15"
+    },
+    {
+      "id": "e3",
+      "source": "n2",
+      "target": "n3",
+      "label": "consults",
+      "contractType": "retainer",
+      "since": "2020-07-01"
+    },
+    {
+      "id": "e4",
+      "source": "n4",
+      "target": "n3",
+      "label": "owner",
+      "since": "2016-01-01",
+      "ownershipPct": 72
+    }
+  ]
+}
+

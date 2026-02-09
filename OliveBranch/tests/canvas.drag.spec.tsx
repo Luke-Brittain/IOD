@@ -4,8 +4,9 @@ import { createRoot } from 'react-dom/client';
 import Canvas from '../components/canvas/Canvas';
 
 // jsdom in this environment may not implement PointerEvent; polyfill with MouseEvent
-if (typeof (global as any).PointerEvent === 'undefined') {
-  (global as any).PointerEvent = MouseEvent as any;
+const g = globalThis as unknown as Record<string, unknown>;
+if (typeof g.PointerEvent === 'undefined') {
+  g.PointerEvent = MouseEvent as unknown;
 }
 
 describe('Canvas drag', () => {

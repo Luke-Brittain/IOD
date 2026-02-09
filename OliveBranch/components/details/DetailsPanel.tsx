@@ -1,19 +1,24 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { tokens, Button, Input } from '@local/design-system';
+import { Button, Input, Spinner } from '@local/design-system';
 import styles from './DetailsPanel.module.css';
 
 interface DetailsPanelProps {
   nodeId?: string | null;
   onClose?: () => void;
+  onSelectNode?: (id: string) => void;
 }
 
-export default function DetailsPanel({ nodeId, onClose }: DetailsPanelProps) {
+export default function DetailsPanel({ nodeId, onClose, onSelectNode }: DetailsPanelProps) {
   const [editing, setEditing] = useState(false);
-  const [formState, setFormState] = useState<Record<string, any>>({});
+  const [formState, setFormState] = useState<Record<string, unknown>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [neighbors, setNeighbors] = useState<Array<{ edge: Record<string, unknown>; node: Record<string, unknown> | null }>>([]);
+  const [depth, setDepth] = useState<number>(2);
+  const [neighborsLoading, setNeighborsLoading] = useState<boolean>(false);
+  const [highlightIds, setHighlightIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let mounted = true;
@@ -27,8 +32,10 @@ export default function DetailsPanel({ nodeId, onClose }: DetailsPanelProps) {
         const json = await res.json();
         if (!mounted) return;
         setFormState(json.data ?? {});
-      } catch (e: any) {
-        setError(e?.message ?? 'load error');
+        // neighbors are loaded by separate effect (depends on `depth`)
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg ?? 'load error');
       } finally {
         setLoading(false);
       }
@@ -36,6 +43,45 @@ export default function DetailsPanel({ nodeId, onClose }: DetailsPanelProps) {
     load();
     return () => { mounted = false; };
   }, [nodeId]);
+
+  // fetch neighbors when nodeId or depth changes
+  useEffect(() => {
+    let mounted = true;
+    async function loadNeighbors() {
+      if (!nodeId) {
+        setNeighbors([]);
+        return;
+      }
+      setNeighborsLoading(true);
+      try {
+        const r = await fetch(`/api/nodes/${encodeURIComponent(nodeId)}/neighbors?depth=${depth}`);
+        if (r.ok) {
+          const j = await r.json();
+          if (mounted) {
+            const items = j.data?.neighbors ?? [];
+            setNeighbors(items);
+            // set highlight IDs for newly loaded neighbors
+            const ids = new Set(items.map((it: { node?: Record<string, unknown> | null }) => it.node?.id as string | undefined).filter(Boolean));
+            setHighlightIds(ids);
+            // clear highlights after 1.5s
+            setTimeout(() => {
+              if (mounted) setHighlightIds(new Set());
+            }, 1500);
+          }
+        }
+      } catch (e) {
+        // ignore
+      } finally {
+        if (mounted) setNeighborsLoading(false);
+      }
+    }
+    loadNeighbors();
+    return () => { mounted = false; };
+  }, [nodeId, depth]);
+
+  // When neighbors update, auto-focus first neighbor if nothing else is focused
+  // no auto-focus for MVP
+  useEffect(() => { /* noop */ }, [neighbors]);
 
   if (!nodeId) return null;
 
@@ -59,8 +105,9 @@ export default function DetailsPanel({ nodeId, onClose }: DetailsPanelProps) {
       const json = await res.json();
       setFormState(json.data ?? formState);
       setEditing(false);
-    } catch (e: any) {
-      setError(e?.message ?? 'save error');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg ?? 'save error');
     } finally {
       setLoading(false);
     }
@@ -70,14 +117,14 @@ export default function DetailsPanel({ nodeId, onClose }: DetailsPanelProps) {
     <aside className={styles.panel}>
       <div className={styles.header}>
         <h3>Node: {nodeId}</h3>
-        <Button variant="ghost" size="sm" onClick={onClose}>Close</Button>
+        <Button type="button" variant="ghost" size="sm" onClick={onClose} aria-label={`Close details for ${nodeId}`}>Close</Button>
       </div>
 
       {loading && <p>Loading...</p>}
       {error && <p className={styles.error}>{error}</p>}
 
       <div className={styles.actions}>
-        <Button variant="ghost" size="sm" onClick={() => setEditing((s) => !s)}>{editing ? 'Cancel' : 'Edit'}</Button>
+        <Button type="button" variant="ghost" size="sm" onClick={() => setEditing((s) => !s)} aria-pressed={editing} aria-label={editing ? 'Cancel edit' : 'Edit node'}>{editing ? 'Cancel' : 'Edit'}</Button>
       </div>
 
       {editing ? (
@@ -89,13 +136,62 @@ export default function DetailsPanel({ nodeId, onClose }: DetailsPanelProps) {
             <Input className={styles.input} value={(formState.name as string) ?? ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormState({ ...formState, name: e.target.value })} />
           </div>
           <div className={styles.section}>
-            <Button type="submit" variant="primary" disabled={loading}>Save</Button>
+            <Button type="submit" variant="primary" disabled={loading} aria-label="Save node changes">Save</Button>
           </div>
         </form>
       ) : (
-        <div className={styles.section}>
+          <div className={styles.section}>
           <p>Read-only details for node <strong>{nodeId}</strong>. Use Edit to modify.</p>
-          <pre className={styles.pre}>{JSON.stringify(formState, null, 2)}</pre>
+          <div className={styles.properties}>
+            <table>
+              <tbody>
+                {Object.entries(formState).map(([k, v]) => (
+                  <tr key={k}>
+                    <td className={styles.key}>{k}</td>
+                    <td className={styles.value}>{typeof v === 'object' ? JSON.stringify(v) : String(v)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {neighbors.length > 0 && (
+            <div className={styles.section}>
+              <div className={styles.rowBetween}>
+                <h4>Neighbors ({depth}-level)</h4>
+                <div className={styles.row}>
+                  <label className={styles.label + ' ' + styles.depthLabel}>Depth:</label>
+                  <select className={styles.depthSelect} value={String(depth)} onChange={(e) => setDepth(parseInt(e.target.value, 10))}>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+              </div>
+              <div className={styles.rowBetween}>
+                {neighborsLoading ? <Spinner size="sm" aria-label="Loading neighbors" /> : <p className={styles.note}>Showing neighbors up to {depth} hops for context.</p>}
+              </div>
+              <ul className={styles.neighbors}>
+                {neighbors.map(({ edge, node }) => {
+                  const nid = node?.id;
+                  const isHighlighted = nid ? highlightIds.has(nid) : false;
+                  return (
+                    <li key={edge.id} className={isHighlighted ? styles.highlight : ''}>
+                      <button
+                        className={styles.link}
+                        type="button"
+                        onClick={() => { if (node?.id) onSelectNode?.(node.id); }}
+                        aria-label={node?.id ? `Select node ${String(node.id)} — ${String(edge.label)}` : `Neighbor ${String(edge.label)}`}
+                      >
+                        {node?.label ?? node?.id} — <em>{edge.label}</em>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+              {/* no keyboard-listbox for MVP */}
+            </div>
+          )}
         </div>
       )}
     </aside>

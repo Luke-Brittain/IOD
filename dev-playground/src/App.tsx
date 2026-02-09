@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import Canvas from '../../OliveBranch/components/canvas/Canvas';
+import GraphCanvas from './components/GraphCanvas';
 import DetailsPanel from '../../OliveBranch/components/details/DetailsPanel';
 import { Badge, Modal } from '@local/design-system';
+import { sampleGraph } from './data/sampleGraph';
 
 export default function App() {
   const [showDemo, setShowDemo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const nodes = [
-    { id: 'n1', x: 10, y: 20, label: 'A' },
-    { id: 'n2', x: 120, y: 40, label: 'B' },
-  ];
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const nodes = sampleGraph.nodes;
+  const edges = sampleGraph.edges;
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
@@ -24,7 +24,13 @@ export default function App() {
         </div>
 
         <div style={{ width: '100%', height: '80vh' }}>
-          <Canvas nodes={nodes} onNodeDoubleClick={(id) => alert('dbl ' + id)} onNodeSelect={(id) => console.log('select', id)} />
+          <GraphCanvas
+            nodes={nodes}
+            edges={edges}
+            onNodeDoubleClick={(id) => alert('dbl ' + id)}
+            onNodeSelect={(id) => setSelectedNode(id)}
+            highlightNodeId={selectedNode}
+          />
         </div>
 
         {showDemo && (
@@ -39,7 +45,7 @@ export default function App() {
       </div>
       <div style={{ width: 380 }}>
         <h2 style={{ margin: 8 }}>Details</h2>
-        <DetailsPanel nodeId="n1" />
+        <DetailsPanel nodeId={selectedNode} onClose={() => setSelectedNode(null)} onSelectNode={(id) => setSelectedNode(id)} />
       </div>
 
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Demo Modal">

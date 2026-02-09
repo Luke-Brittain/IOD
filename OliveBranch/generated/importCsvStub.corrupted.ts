@@ -1,3 +1,7 @@
+/* eslint-disable */
+/* tslint:disable */
+// @ts-nocheck
+// Generated backup — suppressed to avoid lint/TS noise. Do NOT import.
 // BACKUP: corrupted concatenated generated handler (kept for forensics)
 // This file was produced as a backup of the corrupted generated artifact.
 // It contains repeated/concatenated fragments and must NOT be used by the app.

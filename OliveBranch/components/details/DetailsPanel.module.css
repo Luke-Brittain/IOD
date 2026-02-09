@@ -3,6 +3,14 @@
   padding: var(--space-md);
   background: var(--bg-primary);
   border-left: 1px solid rgba(0,0,0,0.04);
+  /* position fixed so showing the panel doesn't reflow the page and cause scroll jumps */
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: -6px 0 18px rgba(2,18,22,0.06);
+  z-index: 40;
 }
 
 .header {
@@ -23,9 +31,86 @@
   margin-top: var(--space-sm);
 }
 
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.rowBetween {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.depthLabel {
+  margin-right: 8px;
+}
+
 .pre {
   white-space: pre-wrap;
 }
 
 .label { display: block; margin-bottom: 6px; font-size: 13px; }
 .input { width: 100%; padding: var(--space-xs) var(--space-sm); border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; }
+
+.note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 6px 0 8px 0;
+}
+
+.neighbors {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.neighbors li { margin: 6px 0; }
+
+.link {
+  background: none;
+  border: none;
+  color: var(--text-accent);
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Visible focus style for keyboard navigation */
+.link:focus {
+  outline: 2px solid rgba(0, 179, 198, 0.18);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Ensure primary and ghost buttons show a clear focus ring */
+.panel button:focus {
+  outline: 3px solid rgba(0, 179, 198, 0.16);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* When an option is programmatically selected/focused */
+.link[aria-selected="true"] {
+  background: rgba(0, 179, 198, 0.04);
+}
+
+.depthSelect {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.properties table { width: 100%; border-collapse: collapse; }
+.properties td { padding: 6px 8px; vertical-align: top; }
+.key { font-weight: 600; width: 30%; }
+.value { width: 70%; color: var(--text-secondary); }
+
+.highlight {
+  animation: neighbor-pulse 1.2s ease-out;
+}
+
+@keyframes neighbor-pulse {
+  0% { background-color: rgba(0, 179, 198, 0.18); }
+  60% { background-color: rgba(0, 179, 198, 0.06); }
+  100% { background-color: transparent; }
+}
