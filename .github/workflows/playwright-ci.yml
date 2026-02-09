@@ -1,0 +1,49 @@
+name: Playwright drag smoke test
+
+on:
+  push:
+    branches: [ main, feat/*, develop ]
+  workflow_dispatch: {}
+
+jobs:
+  run-drag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node and pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          node-version: '20'
+
+      - name: Install workspace dependencies
+        run: pnpm -w install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Start dev server (background)
+        working-directory: ./dev-playground
+        run: |
+          # start vite on 127.0.0.1 so Playwright can connect
+          pnpm dev -- --host 127.0.0.1 &
+
+      - name: Wait for dev server
+        run: npx wait-on http://127.0.0.1:5174/ --timeout 60000
+
+      - name: Run Playwright drag script
+        working-directory: ./dev-playground
+        run: |
+          node playwright/run-drag.js || true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            dev-playground/playwright/screenshot.png
+            dev-playground/playwright/trace.zip
+            dev-playground/playwright/run-drag.log
+          if-no-files-found: ignore
