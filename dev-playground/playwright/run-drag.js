@@ -177,6 +177,34 @@ const { chromium } = require('playwright');
 
     const afterPos = await readSvgPosFromHandle(circleHandle);
     console.log('Position after drag:', afterPos);
+
+    // Assert numeric delta to fail CI if drag didn't move enough
+    function numericValue(pos, keys) {
+      for (const k of keys) {
+        if (pos && pos[k] != null) {
+          const v = Number(pos[k]);
+          if (!Number.isNaN(v)) return v;
+        }
+      }
+      return null;
+    }
+    const beforeX = numericValue(beforePos, ['rectCx', 'tx', 'cx']);
+    const beforeY = numericValue(beforePos, ['rectCy', 'ty', 'cy']);
+    const afterX = numericValue(afterPos, ['rectCx', 'tx', 'cx']);
+    const afterY = numericValue(afterPos, ['rectCy', 'ty', 'cy']);
+    if (beforeX != null && beforeY != null && afterX != null && afterY != null) {
+      const dx = afterX - beforeX;
+      const dy = afterY - beforeY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const MIN_DRAG_PIXELS = process.env.PLAYWRIGHT_MIN_DRAG_PIXELS ? Number(process.env.PLAYWRIGHT_MIN_DRAG_PIXELS) : 20;
+      console.log('Drag delta (px):', { dx, dy, dist, threshold: MIN_DRAG_PIXELS });
+      if (dist < MIN_DRAG_PIXELS) {
+        console.error(`Drag movement below threshold (${dist.toFixed(2)}px < ${MIN_DRAG_PIXELS}px). Failing run.`);
+        process.exitCode = 3;
+      }
+    } else {
+      console.warn('Could not determine numeric before/after coordinates for assertion; skipping CI delta check.');
+    }
     // save screenshot and trace
     try {
       await page.screenshot({ path: 'playwright/screenshot.png', fullPage: true });
