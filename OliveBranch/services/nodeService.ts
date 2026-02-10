@@ -127,7 +127,7 @@ export async function upsertNode(
     }
 
     // No match - create new
-    return await createNode(user, node as any);
+    return await createNode(user, node as unknown as Partial<System | Dataset | Table | Field | CalculatedMetric>);
   } catch (err: unknown) {
     const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : 'Unknown';
     return { success: false, error: { code: 'DB_ERROR', message } };

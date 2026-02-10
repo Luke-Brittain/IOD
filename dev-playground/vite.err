@@ -1,0 +1,574 @@
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+[2m7:01:21 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "./GraphCanvas.module.css" from "src/components/GraphCanvas/GraphCanvas.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:3:19
+[33m  17 |  var _s = $RefreshSig$();
+  18 |  import { useRef, useState } from "react";
+  19 |  import styles from "./GraphCanvas.module.css";
+     |                      ^
+  20 |  export default function GraphCanvas({ nodes: initialNodes, edges, width = 800, height = 600, onNodeSelect, onNodeDoubleClick, highlightNodeId }) {
+  21 |    _s();[39m
+      at TransformPluginContext._formatError (file:///C:/Users/KayaBread/Documents/Luke%20Docs/IOD/IOD-2/node_modules/.pnpm/vite@5.4.21_@types+node@25.2.2/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/KayaBread/Documents/Luke%20Docs/IOD/IOD-2/node_modules/.pnpm/vite@5.4.21_@types+node@25.2.2/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/KayaBread/Documents/Luke%20Docs/IOD/IOD-2/node_modules/.pnpm/vite@5.4.21_@types+node@25.2.2/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async file:///C:/Users/KayaBread/Documents/Luke%20Docs/IOD/IOD-2/node_modules/.pnpm/vite@5.4.21_@types+node@25.2.2/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/KayaBread/Documents/Luke%20Docs/IOD/IOD-2/node_modules/.pnpm/vite@5.4.21_@types+node@25.2.2/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/KayaBread/Documents/Luke%20Docs/IOD/IOD-2/node_modules/.pnpm/vite@5.4.21_@types+node@25.2.2/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/KayaBread/Documents/Luke%20Docs/IOD/IOD-2/node_modules/.pnpm/vite@5.4.21_@types+node@25.2.2/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/KayaBread/Documents/Luke%20Docs/IOD/IOD-2/node_modules/.pnpm/vite@5.4.21_@types+node@25.2.2/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m7:02:35 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (66:4)
+
+[0m [90m 64 |[31m       {[90m/* nodes */[31m}
+ [90m 65 |[31m   useEffect(() [33m=>[31m {
+[31m[1m>[22m[31m[90m 66 |[31m     [36mif[31m ([33m![31mhighlightNodeId) [36mreturn[31m[33m;[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 67 |[31m     setActiveHighlightId(highlightNodeId)[33m;[31m
+ [90m 68 |[31m     [36mconst[31m t [33m=[31m setTimeout(() [33m=>[31m setActiveHighlightId([36mnull[31m)[33m,[31m [35m1400[31m)[33m;[31m
+ [90m 69 |[31m     [36mreturn[31m () [33m=>[31m clearTimeout(t)[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:66:4
+[33m  65 |    useEffect(() => {
+  66 |      if (!highlightNodeId) return;
+  67 |      setActiveHighlightId(highlightNodeId);
+     |                                     ^
+  68 |      const t = setTimeout(() => setActiveHighlightId(null), 1400);
+  69 |      return () => clearTimeout(t);[39m
+      at constructor (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11442:22)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4632:31)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4711:36)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+[2m7:02:39 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (66:4)
+
+[0m [90m 64 |[31m       {[90m/* nodes */[31m}
+ [90m 65 |[31m   useEffect(() [33m=>[31m {
+[31m[1m>[22m[31m[90m 66 |[31m     [36mif[31m ([33m![31mhighlightNodeId) [36mreturn[31m[33m;[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 67 |[31m     setActiveHighlightId(highlightNodeId)[33m;[31m
+ [90m 68 |[31m     [36mconst[31m t [33m=[31m setTimeout(() [33m=>[31m setActiveHighlightId([36mnull[31m)[33m,[31m [35m1400[31m)[33m;[31m
+ [90m 69 |[31m     [36mreturn[31m () [33m=>[31m clearTimeout(t)[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:66:4
+[33m  65 |    useEffect(() => {
+  66 |      if (!highlightNodeId) return;
+  67 |      setActiveHighlightId(highlightNodeId);
+     |                                     ^
+  68 |      const t = setTimeout(() => setActiveHighlightId(null), 1400);
+  69 |      return () => clearTimeout(t);[39m
+      at constructor (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11442:22)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4632:31)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4711:36)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+[2m7:02:58 pm[22m [31m[1m[vite][22m[39m Pre-transform error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (66:4)
+
+[0m [90m 64 |[39m       {[90m/* nodes */[39m}
+ [90m 65 |[39m   useEffect(() [33m=>[39m {
+[31m[1m>[22m[39m[90m 66 |[39m     [36mif[39m ([33m![39mhighlightNodeId) [36mreturn[39m[33m;[39m
+ [90m    |[39m     [31m[1m^[22m[39m
+ [90m 67 |[39m     setActiveHighlightId(highlightNodeId)[33m;[39m
+ [90m 68 |[39m     [36mconst[39m t [33m=[39m setTimeout(() [33m=>[39m setActiveHighlightId([36mnull[39m)[33m,[39m [35m1400[39m)[33m;[39m
+ [90m 69 |[39m     [36mreturn[39m () [33m=>[39m clearTimeout(t)[33m;[39m[0m
+[2m7:02:58 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (66:4)
+
+[0m [90m 64 |[31m       {[90m/* nodes */[31m}
+ [90m 65 |[31m   useEffect(() [33m=>[31m {
+[31m[1m>[22m[31m[90m 66 |[31m     [36mif[31m ([33m![31mhighlightNodeId) [36mreturn[31m[33m;[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 67 |[31m     setActiveHighlightId(highlightNodeId)[33m;[31m
+ [90m 68 |[31m     [36mconst[31m t [33m=[31m setTimeout(() [33m=>[31m setActiveHighlightId([36mnull[31m)[33m,[31m [35m1400[31m)[33m;[31m
+ [90m 69 |[31m     [36mreturn[31m () [33m=>[31m clearTimeout(t)[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:66:4
+[33m  65 |    useEffect(() => {
+  66 |      if (!highlightNodeId) return;
+  67 |      setActiveHighlightId(highlightNodeId);
+     |                                     ^
+  68 |      const t = setTimeout(() => setActiveHighlightId(null), 1400);
+  69 |      return () => clearTimeout(t);[39m
+      at constructor (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11442:22)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4632:31)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4711:36)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+[2m7:03:16 pm[22m [31m[1m[vite][22m[39m Pre-transform error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (73:4)
+
+[0m [90m 71 |[39m       {[90m/* nodes */[39m}
+ [90m 72 |[39m   useEffect(() [33m=>[39m {
+[31m[1m>[22m[39m[90m 73 |[39m     [36mif[39m ([33m![39mhighlightNodeId) [36mreturn[39m[33m;[39m
+ [90m    |[39m     [31m[1m^[22m[39m
+ [90m 74 |[39m     setActiveHighlightId(highlightNodeId)[33m;[39m
+ [90m 75 |[39m     [36mconst[39m t [33m=[39m setTimeout(() [33m=>[39m setActiveHighlightId([36mnull[39m)[33m,[39m [35m1400[39m)[33m;[39m
+ [90m 76 |[39m     [36mreturn[39m () [33m=>[39m clearTimeout(t)[33m;[39m[0m
+[2m7:03:16 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (73:4)
+
+[0m [90m 71 |[31m       {[90m/* nodes */[31m}
+ [90m 72 |[31m   useEffect(() [33m=>[31m {
+[31m[1m>[22m[31m[90m 73 |[31m     [36mif[31m ([33m![31mhighlightNodeId) [36mreturn[31m[33m;[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 74 |[31m     setActiveHighlightId(highlightNodeId)[33m;[31m
+ [90m 75 |[31m     [36mconst[31m t [33m=[31m setTimeout(() [33m=>[31m setActiveHighlightId([36mnull[31m)[33m,[31m [35m1400[31m)[33m;[31m
+ [90m 76 |[31m     [36mreturn[31m () [33m=>[31m clearTimeout(t)[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:73:4
+[33m  72 |    useEffect(() => {
+  73 |      if (!highlightNodeId) return;
+  74 |      setActiveHighlightId(highlightNodeId);
+     |                                            ^
+  75 |      const t = setTimeout(() => setActiveHighlightId(null), 1400);
+  76 |      return () => clearTimeout(t);[39m
+      at constructor (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11442:22)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4632:31)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4711:36)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+[2m7:03:45 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (73:4)
+
+[0m [90m 71 |[31m       {[90m/* nodes */[31m}
+ [90m 72 |[31m   useEffect(() [33m=>[31m {
+[31m[1m>[22m[31m[90m 73 |[31m     [36mif[31m ([33m![31mhighlightNodeId) [36mreturn[31m[33m;[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 74 |[31m     setActiveHighlightId(highlightNodeId)[33m;[31m
+ [90m 75 |[31m     [36mconst[31m t [33m=[31m setTimeout(() [33m=>[31m setActiveHighlightId([36mnull[31m)[33m,[31m [35m1400[31m)[33m;[31m
+ [90m 76 |[31m     [36mreturn[31m () [33m=>[31m clearTimeout(t)[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:73:4
+[33m  72 |    useEffect(() => {
+  73 |      if (!highlightNodeId) return;
+  74 |      setActiveHighlightId(highlightNodeId);
+     |                                            ^
+  75 |      const t = setTimeout(() => setActiveHighlightId(null), 1400);
+  76 |      return () => clearTimeout(t);[39m
+      at constructor (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11442:22)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4632:31)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4711:36)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+[2m7:03:47 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (73:4)
+
+[0m [90m 71 |[31m       {[90m/* nodes */[31m}
+ [90m 72 |[31m   useEffect(() [33m=>[31m {
+[31m[1m>[22m[31m[90m 73 |[31m     [36mif[31m ([33m![31mhighlightNodeId) [36mreturn[31m[33m;[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 74 |[31m     setActiveHighlightId(highlightNodeId)[33m;[31m
+ [90m 75 |[31m     [36mconst[31m t [33m=[31m setTimeout(() [33m=>[31m setActiveHighlightId([36mnull[31m)[33m,[31m [35m1400[31m)[33m;[31m
+ [90m 76 |[31m     [36mreturn[31m () [33m=>[31m clearTimeout(t)[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:73:4
+[33m  72 |    useEffect(() => {
+  73 |      if (!highlightNodeId) return;
+  74 |      setActiveHighlightId(highlightNodeId);
+     |                                            ^
+  75 |      const t = setTimeout(() => setActiveHighlightId(null), 1400);
+  76 |      return () => clearTimeout(t);[39m
+      at constructor (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11442:22)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4632:31)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4711:36)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+[2m7:03:55 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (73:4)
+
+[0m [90m 71 |[31m       {[90m/* nodes */[31m}
+ [90m 72 |[31m   useEffect(() [33m=>[31m {
+[31m[1m>[22m[31m[90m 73 |[31m     [36mif[31m ([33m![31mhighlightNodeId) [36mreturn[31m[33m;[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 74 |[31m     setActiveHighlightId(highlightNodeId)[33m;[31m
+ [90m 75 |[31m     [36mconst[31m t [33m=[31m setTimeout(() [33m=>[31m setActiveHighlightId([36mnull[31m)[33m,[31m [35m1400[31m)[33m;[31m
+ [90m 76 |[31m     [36mreturn[31m () [33m=>[31m clearTimeout(t)[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:73:4
+[33m  72 |    useEffect(() => {
+  73 |      if (!highlightNodeId) return;
+  74 |      setActiveHighlightId(highlightNodeId);
+     |                                            ^
+  75 |      const t = setTimeout(() => setActiveHighlightId(null), 1400);
+  76 |      return () => clearTimeout(t);[39m
+      at constructor (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11442:22)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4632:31)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4711:36)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+[2m7:04:02 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\dev-playground\src\components\GraphCanvas\GraphCanvas.tsx: Unexpected token (73:4)
+
+[0m [90m 71 |[31m       {[90m/* nodes */[31m}
+ [90m 72 |[31m   useEffect(() [33m=>[31m {
+[31m[1m>[22m[31m[90m 73 |[31m     [36mif[31m ([33m![31mhighlightNodeId) [36mreturn[31m[33m;[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 74 |[31m     setActiveHighlightId(highlightNodeId)[33m;[31m
+ [90m 75 |[31m     [36mconst[31m t [33m=[31m setTimeout(() [33m=>[31m setActiveHighlightId([36mnull[31m)[33m,[31m [35m1400[31m)[33m;[31m
+ [90m 76 |[31m     [36mreturn[31m () [33m=>[31m clearTimeout(t)[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/KayaBread/Documents/Luke Docs/IOD/IOD-2/dev-playground/src/components/GraphCanvas/GraphCanvas.tsx[39m:73:4
+[33m  72 |    useEffect(() => {
+  73 |      if (!highlightNodeId) return;
+  74 |      setActiveHighlightId(highlightNodeId);
+     |                                            ^
+  75 |      const t = setTimeout(() => setActiveHighlightId(null), 1400);
+  76 |      return () => clearTimeout(t);[39m
+      at constructor (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11442:22)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4632:31)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4711:36)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\KayaBread\Documents\Luke Docs\IOD\IOD-2\node_modules\.pnpm\@babel+parser@7.29.0\node_modules\@babel\parser\lib\index.js:10784:23)

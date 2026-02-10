@@ -1,0 +1,20 @@
+.toolbar {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.checkboxText {
+  margin-left: 6px;
+}
+
+.result {
+  max-width: 400px;
+  white-space: pre-wrap;
+}

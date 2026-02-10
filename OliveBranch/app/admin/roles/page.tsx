@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Button } from '@local/design-system';
+import styles from './roles.module.css';
 
 export default function RolesAdmin() {
   const [text, setText] = useState('');
@@ -37,14 +39,14 @@ export default function RolesAdmin() {
   };
 
   return (
-    <main style={{ padding: 20 }}>
+    <main className={styles.page}>
       <h1>Role Permissions (Admin)</h1>
       <p>Edit the JSON mapping and click Save. Requires an admin session.</p>
-      <textarea value={text} onChange={(e) => setText(e.target.value)} style={{ width: '100%', height: 420, fontFamily: 'monospace' }} />
-      <div style={{ marginTop: 12 }}>
-        <button onClick={save} disabled={saving} style={{ padding: '8px 16px' }}>
+      <textarea value={text} onChange={(e) => setText(e.target.value)} className={styles.textarea} />
+      <div className={styles.actions}>
+        <Button onClick={save} disabled={saving} className={styles.saveButton}>
           {saving ? 'Saving...' : 'Save'}
-        </button>
+        </Button>
       </div>
     </main>
   );

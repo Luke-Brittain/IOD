@@ -1,3 +1,4 @@
+// Use `unknown` for mock args to avoid explicit `any` and unused-vars
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('import/csv route (non-dry-run integration)', () => {
@@ -12,20 +13,21 @@ describe('import/csv route (non-dry-run integration)', () => {
   });
 
   it('JSON non-dry-run performs create and update calls', async () => {
-    const createMock = vi.fn(async (user: any, payload: any) => ({ success: true, data: { id: 'created' } }));
-    const updateMock = vi.fn(async (user: any, id: string, payload: any) => ({ success: true, data: { id } }));
-    const upsertMock = vi.fn(async (user: any, payload: any) => {
-      if (payload.id) return updateMock(user, payload.id, payload);
+    const createMock = vi.fn(async (_user: unknown, _payload: unknown) => ({ success: true, data: { id: 'created' } }));
+    const updateMock = vi.fn(async (_user: unknown, id: string, _payload: unknown) => ({ success: true, data: { id } }));
+    const upsertMock = vi.fn(async (user: unknown, payload: unknown) => {
+      const id = (payload as Record<string, unknown>)['id'] as string | undefined;
+      if (id) return updateMock(user, id, payload);
       return createMock(user, payload);
     });
 
     vi.doMock('next/server', () => ({
-      NextResponse: { json: (body: unknown, init?: unknown) => new Response(JSON.stringify(body), init as any) },
+      NextResponse: { json: (body: unknown, init?: unknown) => new Response(JSON.stringify(body), init as unknown as ResponseInit) },
     }));
 
     vi.doMock('@/lib/validation/schemas', () => ({
-      ImportRowsSchema: { safeParse: (b: any) => ({ success: !!b && Array.isArray(b.rows), data: b }) },
-      NodeCreateSchema: { safeParse: (p: any) => ({ success: typeof p?.name === 'string' && p.name.length > 0, data: p, error: { flatten: () => ({ formErrors: ['name required'] }) } }) },
+      ImportRowsSchema: { safeParse: (b: unknown) => ({ success: !!b && Array.isArray((b as Record<string, unknown>).rows), data: b }) },
+      NodeCreateSchema: { safeParse: (p: unknown) => ({ success: typeof (p as Record<string, unknown>)?.name === 'string' && (p as Record<string, unknown>).name.length > 0, data: p, error: { flatten: () => ({ formErrors: ['name required'] }) } }) },
     }));
 
     vi.doMock('@/lib/authMiddleware', () => ({

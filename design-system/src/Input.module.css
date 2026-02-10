@@ -1,0 +1,15 @@
+.input {
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  color: #0E1B20;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.full {
+  width: 100%;
+}
+
+.withLabel { display: block; margin-bottom: 8px; }

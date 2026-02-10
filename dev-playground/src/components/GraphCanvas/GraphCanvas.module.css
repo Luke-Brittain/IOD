@@ -1,0 +1,21 @@
+.pulseRing {
+  /* Subtle filled halo (no animation) for reliable SVG rendering */
+  transform-box: fill-box;
+  -webkit-transform-box: fill-box;
+  transform-origin: 50% 50%;
+  /* Use a faint fill so the halo is visible even if stroke styling is inconsistent */
+  fill: #00B3C6;
+  /* increase opacity so the halo is perceptible but still subtle */
+  fill-opacity: 0.12;
+  /* small blur to soften the edge without hiding the halo */
+  filter: blur(0.6px);
+  /* allow opacity transitions for fade-out */
+  opacity: 1;
+  transition: opacity 800ms ease-out;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.fading {
+  opacity: 0;
+}

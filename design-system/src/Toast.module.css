@@ -1,0 +1,58 @@
+.container {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  min-width: 220px;
+  background: #031926;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(2, 18, 22, 0.32);
+  z-index: 4000;
+  font-family: Inter, system-ui, Arial, sans-serif;
+  font-size: 13px;
+}
+
+.pendingRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  background: #f59e0b;
+  box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.06);
+}
+
+.rowSpace {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btnPrimary {
+  background: #00B3C6;
+  border: none;
+  color: #022;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btnSecondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}

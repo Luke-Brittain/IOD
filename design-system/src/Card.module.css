@@ -1,0 +1,11 @@
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(2,18,22,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+  padding: 16px;
+}
+
+.header { margin-bottom: 8px; font-weight: 600; }
+.body { margin-bottom: 8px; }
+.footer { text-align: right; }

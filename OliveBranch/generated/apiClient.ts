@@ -1,3 +1,7 @@
+/* eslint-disable */
+/* tslint:disable */
+// @ts-nocheck
+// Generated file — suppress linting and type-checking during development
 /**
  * Auto-generated lightweight API client for OliveBranch OpenAPI (minimal, fetch-based)
  * - Supports the POST /api/import/csv endpoint with JSON or multipart/form-data
