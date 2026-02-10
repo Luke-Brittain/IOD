@@ -3,7 +3,8 @@
 	"private": true,
 	"workspaces": [
 		"design-system",
-		"dev-playground"
+		"dev-playground",
+		"greenspaces"
 	],
     "scripts": {
         "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
