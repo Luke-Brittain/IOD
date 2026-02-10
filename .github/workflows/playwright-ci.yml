@@ -8,6 +8,11 @@ on:
 jobs:
   run-drag:
     runs-on: ubuntu-latest
+    # Default threshold (in pixels) used by the Playwright script to assert
+    # that a drag actually moved the node. Can be overridden in workflow
+    # dispatch or repo secrets/env if desired.
+    env:
+      PLAYWRIGHT_MIN_DRAG_PIXELS: 20
     timeout-minutes: 20
     steps:
       - name: Checkout
@@ -24,21 +29,16 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Start dev server (background)
+      - name: Run Playwright drag runner
         working-directory: ./dev-playground
+        # The runner starts the dev server, runs the Playwright script,
+        # captures artifacts and cleans up. Exit code is not masked so the
+        # job will fail on non-zero exit (CI will surface failures).
         run: |
-          # start vite on 127.0.0.1 so Playwright can connect
-          pnpm dev -- --host 127.0.0.1 &
-
-      - name: Wait for dev server
-        run: npx wait-on http://127.0.0.1:5174/ --timeout 60000
-
-      - name: Run Playwright drag script
-        working-directory: ./dev-playground
-        run: |
-          node playwright/run-drag.js || true
+          node playwright/run-drag-runner.js
 
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts
