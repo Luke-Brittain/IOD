@@ -1,0 +1,15 @@
+{
+  "name": "greenspaces",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Greenspaces — new side project",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "vitest",
+    "dev": "node ./dist/index.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.1.0"
+  }
+}
