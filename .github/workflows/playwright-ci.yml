@@ -34,7 +34,10 @@ jobs:
 
       - name: Install Playwright browsers
         working-directory: ./dev-playground
-        run: pnpm exec playwright install --with-deps
+        run: |
+          # Ensure package deps for the dev-playground package are installed
+          pnpm install --frozen-lockfile
+          pnpm exec playwright install --with-deps
 
       - name: Run Playwright drag runner
         working-directory: ./dev-playground
