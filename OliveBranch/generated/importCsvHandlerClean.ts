@@ -10,12 +10,47 @@ try {
   const ns = require('next/server');
   NextResponse = ns?.NextResponse ?? ns;
 } catch {
-  // Fallback implementation that produces a standard Response with JSON body
+  // Fallback implementation that returns a lightweight Response-like object
+  // with a `json()` helper. Some test environments (jsdom/vitest) may not
+  // provide the exact same `Response` implementation as Next.js, and tests
+  // assert on `res.json()`. Returning an object with an async `json()`
+  // method keeps the behavior predictable.
   NextResponse = {
     json(body: any, init?: any) {
       const headers = (init && init.headers) || { 'content-type': 'application/json' };
       const status = init?.status ?? 200;
-      return new Response(JSON.stringify(body), { status, headers });
+      return {
+        status,
+        headers,
+        async json() {
+          return body;
+        },
+        async text() {
+          return JSON.stringify(body);
+        },
+      };
+    },
+  };
+}
+
+// Ensure any returned value behaves like a Response with a `json()` method.
+function _toResp(body: any, init?: any) {
+  try {
+    const out = NextResponse.json(body, init);
+    if (out && typeof out.json === 'function') return out;
+  } catch {
+    // fallthrough to returning our lightweight object
+  }
+  const headers = (init && init.headers) || { 'content-type': 'application/json' };
+  const status = init?.status ?? 200;
+  return {
+    status,
+    headers,
+    async json() {
+      return body;
+    },
+    async text() {
+      return JSON.stringify(body);
     },
   };
 }
@@ -63,7 +98,7 @@ export async function importCsvHandler(req: Request): Promise<Response> {
       const body = await req.json();
       const { ImportRowsSchema } = await import('@/lib/validation/schemas');
       const parsed = ImportRowsSchema.safeParse(body);
-      if (!parsed.success) return NextResponse.json({ success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.flatten() } }, { status: 400 });
+      if (!parsed.success) return _toResp({ success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.flatten() } }, { status: 400 });
 
       const rows = parsed.data.rows as Record<string, unknown>[];
       const stableKeysFromBody = Array.isArray(body?.stableKeys) ? body.stableKeys : typeof body?.stableKeys === 'string' ? String(body.stableKeys).split(',').map((s: string) => s.trim()).filter(Boolean) : undefined;
@@ -106,7 +141,7 @@ export async function importCsvHandler(req: Request): Promise<Response> {
         } catch (e: unknown) { summary.errors++; const message = typeof e === 'object' && e !== null && 'message' in e && typeof (e as Record<string, unknown>).message === 'string' ? (e as Record<string, unknown>).message as string : 'unknown'; rowResults.push({ row: i + 1, status: 'error', code: 'IMPORT_ERROR', message }); }
       }
 
-      return NextResponse.json({ success: true, data: { summary, rows: rowResults } });
+      return _toResp({ success: true, data: { summary, rows: rowResults } });
     }
 
     if (ct.includes('multipart/form-data')) {
@@ -114,8 +149,8 @@ export async function importCsvHandler(req: Request): Promise<Response> {
       const file = form.get('file') as File | null;
       const stableKeysFromForm = form.get('stableKeys') ? String(form.get('stableKeys')) : undefined;
       const stableKeys = stableKeysQuery ? stableKeysQuery.split(',').map((s) => s.trim()).filter(Boolean) : (stableKeysFromForm ? stableKeysFromForm.split(',').map((s) => s.trim()).filter(Boolean) : undefined);
-      if (!file) return NextResponse.json({ success: false, error: { code: 'MISSING_FILE', message: 'Form must include a `file` field with CSV.' } }, { status: 400 });
-      if (typeof (file as any).size === 'number' && (file as any).size > MAX_UPLOAD_BYTES) return NextResponse.json({ success: false, error: { code: 'FILE_TOO_LARGE', message: 'Uploaded file exceeds the 5MB size limit.' } }, { status: 413 });
+      if (!file) return _toResp({ success: false, error: { code: 'MISSING_FILE', message: 'Form must include a `file` field with CSV.' } }, { status: 400 });
+      if (typeof (file as any).size === 'number' && (file as any).size > MAX_UPLOAD_BYTES) return _toResp({ success: false, error: { code: 'FILE_TOO_LARGE', message: 'Uploaded file exceeds the 5MB size limit.' } }, { status: 413 });
 
       let records: Record<string, string | null>[] = [];
       const webStream = (file as any).stream?.();
@@ -169,17 +204,17 @@ export async function importCsvHandler(req: Request): Promise<Response> {
         } catch (e: unknown) { summary.errors++; const message = typeof e === 'object' && e !== null && 'message' in e && typeof (e as Record<string, unknown>).message === 'string' ? (e as Record<string, unknown>).message as string : 'unknown'; rowResults.push({ row: i + 1, status: 'error', code: 'IMPORT_ERROR', message }); }
       }
 
-      return NextResponse.json({ success: true, data: { summary, rows: rowResults } });
+      return _toResp({ success: true, data: { summary, rows: rowResults } });
     }
 
-    return NextResponse.json({ success: false, error: { code: 'INVALID_CONTENT_TYPE', message: 'Use application/json with { rows: [...] } or multipart/form-data with a `file` field.' } }, { status: 400 });
+    return _toResp({ success: false, error: { code: 'INVALID_CONTENT_TYPE', message: 'Use application/json with { rows: [...] } or multipart/form-data with a `file` field.' } }, { status: 400 });
   } catch (err: unknown) {
     // Log error during tests to aid debugging
     // eslint-disable-next-line no-console
     console.error('importCsvHandler error:', err);
     const status = typeof err === 'object' && err !== null && 'status' in err ? (err as Record<string, unknown>).status as number : 500;
     const message = typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string' ? (err as Record<string, unknown>).message as string : String(err ?? 'Unknown');
-    return NextResponse.json({ success: false, error: { code: 'ERR', message } }, { status });
+    return _toResp({ success: false, error: { code: 'ERR', message } }, { status });
   }
 }
 
