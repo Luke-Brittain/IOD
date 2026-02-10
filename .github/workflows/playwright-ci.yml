@@ -33,6 +33,7 @@ jobs:
         run: pnpm -w install --frozen-lockfile
 
       - name: Install Playwright browsers
+        working-directory: ./dev-playground
         run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright drag runner
