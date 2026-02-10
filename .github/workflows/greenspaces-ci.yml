@@ -1,0 +1,46 @@
+name: Greenspaces CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Enable corepack and prepare pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: Install workspace dependencies
+        run: pnpm -w install --frozen-lockfile
+
+      - name: Lint (root)
+        run: pnpm -w lint
+
+      - name: Run Greenspaces tests
+        working-directory: ./greenspaces
+        run: |
+          pnpm exec vitest --config vitest.config.ts --run
+
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: greenspaces-test-logs
+          path: |
+            greenspaces/vitest-report.html
+            greenspaces/test-results/**
+          if-no-files-found: ignore
