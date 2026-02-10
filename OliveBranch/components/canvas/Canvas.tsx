@@ -293,10 +293,10 @@ export default function Canvas({ nodes = [], onNodeDoubleClick, onNodeSelect, on
       {/* Global persistence toast */}
       {/* Global persistence toast (extracted to Toast component) */}
       <Toast
-        pendingCount={Object.values(persistStatus).filter((s) => s.status === 'pending').length}
-        failedIds={Object.entries(persistStatus).filter(([, v]) => v.status === 'failed').map(([k]) => k)}
-        onRetryAll={() => { Object.entries(persistStatus).filter(([, v]) => v.status === 'failed').forEach(([k]) => retryPersist(k)); }}
-        onDismissFailed={() => { setPersistStatus((p) => { const copy = { ...p }; Object.entries(p).filter(([, v]) => v.status === 'failed').forEach(([k]) => delete copy[k]); return copy; }); }}
+        pendingCount={(Object.values(persistStatus as Record<string, { status: 'pending' | 'failed' | 'ok'; attempts: number }>)).filter((s) => s.status === 'pending').length}
+        failedIds={(Object.entries(persistStatus as Record<string, { status: 'pending' | 'failed' | 'ok'; attempts: number }>)).filter(([, v]) => v.status === 'failed').map(([k]) => k)}
+        onRetryAll={() => { (Object.entries(persistStatus as Record<string, { status: 'pending' | 'failed' | 'ok'; attempts: number }>)).filter(([, v]) => v.status === 'failed').forEach(([k]) => retryPersist(k)); }}
+        onDismissFailed={() => { setPersistStatus((p) => { const copy = { ...p }; (Object.entries(p as Record<string, { status: 'pending' | 'failed' | 'ok'; attempts: number }>)).filter(([, v]) => v.status === 'failed').forEach(([k]) => delete copy[k]); return copy; }); }}
       />
     </div>
   );

@@ -5,6 +5,8 @@ import { colors, spacing } from './tokens';
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'ghost';
   size?: 'sm' | 'md';
+  children?: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
 export default function Button({ variant = 'primary', size = 'md', children, style, ...rest }: Props) {

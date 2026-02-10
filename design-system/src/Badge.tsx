@@ -6,6 +6,7 @@ type BadgeVariant = 'default' | 'muted' | 'gold' | 'outline';
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   children: React.ReactNode;
   variant?: BadgeVariant;
+  className?: string;
 }
 
 export default function Badge({ children, variant = 'default', className, ...rest }: BadgeProps) {
